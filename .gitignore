@@ -97,7 +97,7 @@ nbactions.xml
 nb-configuration.xml
 
 ## Gradle
-
+.nb-gradle/
 /local.properties
 .gradle/
 gradle-app.setting
