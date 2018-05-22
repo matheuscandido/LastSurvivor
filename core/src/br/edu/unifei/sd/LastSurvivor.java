@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Rectangle;
 
 public class LastSurvivor extends ApplicationAdapter {
 	
@@ -14,12 +15,11 @@ public class LastSurvivor extends ApplicationAdapter {
     public static int MAP_WIDTH;
     public static int MAP_HEIGHT;
     
-    public static OrthographicCamera camera;
-    
-    SpriteBatch batch;
-    Texture img;
-    
-    
+    private OrthographicCamera camera;
+    private SpriteBatch batch;
+    private Texture characterImage;
+    private Texture weaponImage;
+    private Rectangle character;
     
 
     @Override
@@ -28,10 +28,16 @@ public class LastSurvivor extends ApplicationAdapter {
         WINDOW_WIDTH = Gdx.graphics.getWidth();
         WINDOW_HEIGHT = Gdx.graphics.getHeight();
         
-        camera = new OrthographicCamera(WINDOW_WIDTH, WINDOW_HEIGHT);
-        
         batch = new SpriteBatch();
-        img = new Texture("badlogic.jpg");
+        characterImage = new Texture(Gdx.files.internal("survivor-knife.png"));
+        weaponImage = new Texture(Gdx.files.internal("pistol.png"));
+        
+        camera = new OrthographicCamera(WINDOW_WIDTH, WINDOW_HEIGHT);
+        camera.setToOrtho(false, 800, 480);
+        
+        character = new Rectangle();
+        character.x = 800/2-64/2;
+        character.y = 20;
     }
 
     @Override
