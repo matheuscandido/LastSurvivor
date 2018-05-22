@@ -1,4 +1,4 @@
-.nb-gradle/private/
+.nb-gradle/*
 ## Java
 
 *.class
