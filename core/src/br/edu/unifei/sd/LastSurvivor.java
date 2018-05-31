@@ -35,8 +35,7 @@ public class LastSurvivor extends Game {
     public void render () {        
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         
-        gsm.update(Gdx.graphics.getDeltaTime());
-        gsm.render(batch);
+        gsm.render(batch, Gdx.graphics.getDeltaTime());
         
     }
 

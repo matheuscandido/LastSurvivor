@@ -31,12 +31,7 @@ public class MenuState extends State{
     }
 
     @Override
-    public void update(float dt) {
-        
-    }
-
-    @Override
-    public void render(SpriteBatch sb) {
+    public void render(SpriteBatch sb, float dt) {
         sb.begin();
         sb.draw(background, 0, 0, LastSurvivor.WIDTH, LastSurvivor.HEIGHT);
         sb.draw(playButton, (LastSurvivor.WIDTH/2-playButton.getWidth()/2), (LastSurvivor.HEIGHT/2-playButton.getHeight()/2));

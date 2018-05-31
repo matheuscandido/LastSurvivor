@@ -37,12 +37,8 @@ public class PlayState extends State{
     }
 
     @Override
-    public void update(float dt) {
+    public void render(SpriteBatch sb, float dt) {
         handleInput();
-    }
-
-    @Override
-    public void render(SpriteBatch sb) {
         sb.begin();
         sb.draw(characterTexture, character.x, character.y);
         sb.end();
