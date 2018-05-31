@@ -2,6 +2,7 @@ package br.edu.unifei.sd;
 
 import br.edu.unifei.sd.states.GameStateManager;
 import br.edu.unifei.sd.states.MenuState;
+import br.edu.unifei.sd.states.PlayState;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
@@ -25,7 +26,7 @@ public class LastSurvivor extends Game {
         batch = new SpriteBatch();
         
         gsm = new GameStateManager();
-        gsm.push(new MenuState(gsm));
+        gsm.push(new PlayState(gsm));
         
         Gdx.gl.glClearColor(1, 0, 0, 1);
     }

@@ -22,6 +22,9 @@ public class PlayState extends State{
 
     public PlayState(GameStateManager gsm) {
         super(gsm);
+        character = new Rectangle();
+        character.x = 0;
+        character.y = 0;
         characterTexture = new Texture(Gdx.files.internal("survivor-knife.png"));
     }
 
@@ -41,7 +44,7 @@ public class PlayState extends State{
     @Override
     public void render(SpriteBatch sb) {
         sb.begin();
-        sb.draw(characterTexture, 0, 0);
+        sb.draw(characterTexture, character.x, character.y);
         sb.end();
     }
 
