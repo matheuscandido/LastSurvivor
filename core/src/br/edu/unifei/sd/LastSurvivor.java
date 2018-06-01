@@ -1,16 +1,9 @@
 package br.edu.unifei.sd;
 
-import br.edu.unifei.sd.states.GameStateManager;
-import br.edu.unifei.sd.states.MenuState;
-import br.edu.unifei.sd.states.PlayState;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Rectangle;
 
 public class LastSurvivor extends Game {
 	

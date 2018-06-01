@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package br.edu.unifei.sd.states;
+package br.edu.unifei.sd;
 
 import br.edu.unifei.sd.LastSurvivor;
 import com.badlogic.gdx.graphics.Texture;
