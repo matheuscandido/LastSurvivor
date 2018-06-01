@@ -1,0 +1,23 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package br.edu.unifei.sd;
+
+import java.util.LinkedList;
+import java.util.Timer;
+
+/**
+ *
+ * @author matheuscandido
+ */
+public class Mapa {
+    private float largura;
+    private float altura;
+    private Timer escalonadorReducao;
+    private LinkedList<ElementoGrafico> elementosGraficos;
+    private LinkedList<Cliente> clientes;
+    private Servidor servidor;
+    
+}

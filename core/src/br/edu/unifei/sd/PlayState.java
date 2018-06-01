@@ -19,6 +19,7 @@ public class PlayState extends State{
     
     private Texture characterTexture;
     private Rectangle character;
+    private Mapa mapa;
 
     public PlayState(GameStateManager gsm) {
         super(gsm);
@@ -26,6 +27,8 @@ public class PlayState extends State{
         character.x = 0;
         character.y = 0;
         characterTexture = new Texture(Gdx.files.internal("survivor-knife.png"));
+        
+        mapa = new Mapa();
     }
 
     @Override
