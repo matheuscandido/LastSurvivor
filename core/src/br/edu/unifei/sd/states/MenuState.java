@@ -9,10 +9,7 @@ import br.edu.unifei.sd.LastSurvivor;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-/**
- *
- * @author matheuscandido
- */
+
 public class MenuState extends State{
     
     private Texture background;
