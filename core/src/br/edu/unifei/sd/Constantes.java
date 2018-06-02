@@ -12,4 +12,5 @@ package br.edu.unifei.sd;
 public class Constantes {
     public static final int TIRO_ALTURA = 16;
     public static final int TIRO_LARGURA = 16;
+    public static final int NUM_ARMAS = 10;
 }

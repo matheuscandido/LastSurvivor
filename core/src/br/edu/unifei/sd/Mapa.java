@@ -5,6 +5,7 @@
  */
 package br.edu.unifei.sd;
 
+import com.badlogic.gdx.Gdx;
 import java.util.LinkedList;
 import java.util.Timer;
 
@@ -17,7 +18,33 @@ public class Mapa {
     private float altura;
     private Timer escalonadorReducao;
     private LinkedList<ElementoGrafico> elementosGraficos;
+
+    public LinkedList<ElementoGrafico> getElementosGraficos() {
+        return elementosGraficos;
+    }
+
+    public void setElementosGraficos(LinkedList<ElementoGrafico> elementosGraficos) {
+        this.elementosGraficos = elementosGraficos;
+    }
     private LinkedList<Cliente> clientes;
     private Servidor servidor;
     
+    
+    
+ public void   addElementoGrafico(ElementoGrafico eg){
+ 
+
+  elementosGraficos.add(eg);
+ 
+ 
+ }
+ 
+ 
+ public void addCliente(Cliente cliente){
+ 
+ 
+     clientes.add(cliente);
+ }
+ 
+ 
 }

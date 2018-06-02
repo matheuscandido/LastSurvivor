@@ -19,4 +19,12 @@ public class Arma extends Fixo{
         super(largura, altura);
         this.tipoArma = tipoArma;
     }
+
+    public TipoArma getTipoArma() {
+        return tipoArma;
+    }
+
+    public void setTipoArma(TipoArma tipoArma) {
+        this.tipoArma = tipoArma;
+    }
 }
