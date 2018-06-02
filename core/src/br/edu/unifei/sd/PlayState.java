@@ -80,17 +80,18 @@ public class PlayState extends State{
         sb.draw(characterTexture, character.x, character.y);
         
         
-       for(int i = 0 ; i<10;i++){
+       for(Arma arma :armas){
            
-       if(armas.get(i).getTipoArma() == PISTOLA) {   
-        sb.draw(pistolaTexture,armas.get(i).x,armas.get(i).y);
+            if(arma.getTipoArma() == PISTOLA) {   
+             sb.draw(pistolaTexture,arma.x,arma.y);
+            }
+
+            if(arma.getTipoArma() == FUZIL) {   
+             sb.draw(fuzilTexture,arma.x,arma.y);
+            }
+      
        }
        
-       if(armas.get(i).getTipoArma() == FUZIL) {   
-        sb.draw(fuzilTexture,armas.get(i).x,armas.get(i).y);
-       }
-       
-       }
           
        
        
