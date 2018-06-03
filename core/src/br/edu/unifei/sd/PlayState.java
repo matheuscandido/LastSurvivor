@@ -14,6 +14,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
@@ -32,9 +33,12 @@ public class PlayState extends State {
     Random rn = new Random();
     private List<Arma> armas = new ArrayList<Arma>();
 
+    Jogador jogador;
+
     public PlayState(GameStateManager gsm) {
         super(gsm);
-        character = new Rectangle();
+        character = new Rectangle(10, 10, 200, 200);
+
 
         character.x = 0;
         character.y = 0;
@@ -43,10 +47,14 @@ public class PlayState extends State {
         fuzilTexture = new Texture(Gdx.files.internal("SVT-40.png"));
         mapa = new Mapa();
 
+        jogador = new Jogador(character.x, character.y);
+
+
         for (int i = 0; i < NUM_ARMAS; i++) {
 
             if (rn.nextInt(2) == 0) {
                 armas.add(new Arma(5, 5, PISTOLA));
+
             } else {
                 armas.add(new Arma(5, 5, FUZIL));
             }
@@ -54,8 +62,22 @@ public class PlayState extends State {
         }
 
         for (Arma arma : armas) {
+
+
             arma.x = rn.nextInt(1200);
             arma.y = rn.nextInt(700);
+
+            if (arma.getTipoArma() == PISTOLA) {
+                arma.setRetangulo(new Rectangle(arma.x, arma.y, 20, 20));
+            } else {
+                if (arma.getTipoArma() == FUZIL) {
+
+                    arma.setRetangulo(new Rectangle(arma.x, arma.y, 40, 40));
+                }
+
+            }
+
+
         }
 
     }
@@ -80,13 +102,30 @@ public class PlayState extends State {
     public void render(SpriteBatch sb, float dt) {
         handleInput();
         sb.begin();
-        sb.draw(characterTexture, character.x, character.y);
-        for (Arma arma : armas) {
+
+
+        sb.draw(characterTexture, character.getX(), character.getY());
+
+        Iterator<Arma> iter = armas.iterator();//Aqui podemos percorrer a lista de elementos graficos
+        while (iter.hasNext()) {
+            // aqui ficarao os ifs pertinentes a processamento grafico e logico
+            Arma arma = iter.next();
+
             if (arma.getTipoArma() == PISTOLA) {
                 sb.draw(pistolaTexture, arma.x, arma.y);
             }
+
+
             if (arma.getTipoArma() == FUZIL) {
                 sb.draw(fuzilTexture, arma.x, arma.y);
+            }
+
+
+            if (character.overlaps(arma.getRetangulo())) {
+
+                jogador.setArma(arma);
+                iter.remove();
+
             }
 
         }
@@ -95,9 +134,11 @@ public class PlayState extends State {
 
     @Override
     public void dispose() {
+
         characterTexture.dispose();
         pistolaTexture.dispose();
         fuzilTexture.dispose();
+
     }
 
 }

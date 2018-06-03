@@ -17,7 +17,31 @@ public class Arma extends Fixo{
     private float range;
     private boolean picked;
     private TipoArma tipoArma;
-    private Polygon poligono;
+    private Rectangle retangulo;
+
+    public Rectangle getRetangulo() {
+        return retangulo;
+    }
+
+    public void setRetangulo(Rectangle retangulo) {
+        this.retangulo = retangulo;
+    }
+
+    public float getX() {
+        return x;
+    }
+
+    public void setX(float x) {
+        this.x = x;
+    }
+
+    public float getY() {
+        return y;
+    }
+
+    public void setY(float y) {
+        this.y = y;
+    }
     
     public Arma(float largura, float altura, TipoArma tipoArma) {
         super(largura, altura);
@@ -52,13 +76,7 @@ public class Arma extends Fixo{
         this.picked = picked;
     }
 
-    public Polygon getPoligono() {
-        return poligono;
-    }
-
-    public void setPoligono(Polygon poligono) {
-        this.poligono = poligono;
-    }
+    
 
     public void setTipoArma(TipoArma tipoArma) {
         this.tipoArma = tipoArma;
