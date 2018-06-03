@@ -16,20 +16,19 @@ public class LastSurvivor extends Game {
 
     @Override
     public void create () {
-        batch = new SpriteBatch();
-        
+        batch = new SpriteBatch();        
         gsm = new GameStateManager();
-        gsm.push(new PlayState(gsm));
-        
         Gdx.gl.glClearColor(1, 1, 1, 1);
+        gsm.push(new MenuState(gsm));
+//        gsm.push(new PlayState(gsm));       
+
     }
 
     @Override
     public void render () {        
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        
-        gsm.render(batch, Gdx.graphics.getDeltaTime());
-        
+        gsm.update(Gdx.graphics.getDeltaTime());
+        gsm.render(batch);       
     }
 
     @Override

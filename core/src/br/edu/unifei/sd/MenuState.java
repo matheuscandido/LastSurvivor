@@ -6,6 +6,7 @@
 package br.edu.unifei.sd;
 
 import br.edu.unifei.sd.LastSurvivor;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
@@ -24,17 +25,26 @@ public class MenuState extends State{
 
     @Override
     public void handleInput() {
-        
+        if(Gdx.input.justTouched()){
+            gsm.set(new PlayState(gsm));
+            dispose();
+        }
     }
 
     @Override
-    public void render(SpriteBatch sb, float dt) {
+    public void update(float dt){
+        handleInput();
+    }
+    
+    @Override
+    public void render(SpriteBatch sb) { //tirar o float dt
         sb.begin();
         sb.draw(background, 0, 0, LastSurvivor.WIDTH, LastSurvivor.HEIGHT);
-        sb.draw(playButton, (LastSurvivor.WIDTH/2-playButton.getWidth()/2), (LastSurvivor.HEIGHT/2-playButton.getHeight()/2));
+        sb.draw(playButton, (LastSurvivor.WIDTH/2)-(playButton.getWidth()/2), (LastSurvivor.HEIGHT/2));
         sb.end();
+        //-(playButton.getHeight()/2)
     }
-
+    
     @Override
     public void dispose() {
         background.dispose();

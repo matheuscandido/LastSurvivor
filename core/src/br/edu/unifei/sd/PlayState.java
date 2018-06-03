@@ -47,8 +47,12 @@ public class PlayState extends State {
         fuzilTexture = new Texture(Gdx.files.internal("SVT-40.png"));
         mapa = new Mapa();
 
+
         jogador = new Jogador(character.x, character.y);
 
+
+
+        camera.setToOrtho(false, LastSurvivor.WIDTH/2, LastSurvivor.HEIGHT/2);
 
         for (int i = 0; i < NUM_ARMAS; i++) {
 
@@ -99,7 +103,13 @@ public class PlayState extends State {
     }
 
     @Override
-    public void render(SpriteBatch sb, float dt) {
+    public void update(float dt){
+        
+    }
+    
+    @Override
+    public void render(SpriteBatch sb) {
+        sb.setProjectionMatrix(camera.combined);
         handleInput();
         sb.begin();
 
