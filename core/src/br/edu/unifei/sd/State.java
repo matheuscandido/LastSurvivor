@@ -23,6 +23,7 @@ public abstract class State {
     }
     
     public abstract void handleInput();
-    public abstract void render(SpriteBatch sb, float dt);
+    public abstract void update(float dt); // com update
+    public abstract void render(SpriteBatch sb); //, float dt fora do parâmetro
     public abstract void dispose();
 }

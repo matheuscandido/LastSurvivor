@@ -29,6 +29,7 @@ public class PlayState extends State{
         characterTexture = new Texture(Gdx.files.internal("survivor-knife.png"));
         
         mapa = new Mapa();
+        camera.setToOrtho(false, LastSurvivor.WIDTH/2, LastSurvivor.HEIGHT/2);
     }
 
     @Override
@@ -40,7 +41,13 @@ public class PlayState extends State{
     }
 
     @Override
-    public void render(SpriteBatch sb, float dt) {
+    public void update(float dt){
+        
+    }
+    
+    @Override
+    public void render(SpriteBatch sb) {
+        sb.setProjectionMatrix(camera.combined);
         handleInput();
         sb.begin();
         sb.draw(characterTexture, character.x, character.y);
