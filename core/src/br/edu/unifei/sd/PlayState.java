@@ -26,8 +26,6 @@ import java.util.Random;
 public class PlayState extends State {
 
     private Texture characterTexture, pistolaTexture, fuzilTexture;
-    private Rectangle character;
-    // private List<Rectangle> pistolas = new ArrayList<Rectangle>();
     private Mapa mapa;
     float tempo = 0;
     Random rn = new Random();
@@ -37,74 +35,63 @@ public class PlayState extends State {
 
     public PlayState(GameStateManager gsm) {
         super(gsm);
-        character = new Rectangle(10, 10, 200, 200);
-
-
-        character.x = 0;
-        character.y = 0;
+        
+        // Inicializando as coisas
         characterTexture = new Texture(Gdx.files.internal("survivor-knife.png"));
         pistolaTexture = new Texture(Gdx.files.internal("pistol.png"));
         fuzilTexture = new Texture(Gdx.files.internal("SVT-40.png"));
+        
         mapa = new Mapa();
 
+        jogador = new Jogador(
+                0, 
+                0,
+                characterTexture,
+                220,
+                220
+        );
+        
+        // Configura a camera para ?
+        camera.setToOrtho(false, Constantes.MAPA_WIDTH/2, Constantes.MAPA_HEIGHT/2);
 
-        jogador = new Jogador(character.x, character.y);
-
-
-
-        camera.setToOrtho(false, LastSurvivor.WIDTH/2, LastSurvivor.HEIGHT/2);
-
-        for (int i = 0; i < NUM_ARMAS; i++) {
-
+        
+        // Adiciona novas armas ao vetor de armas
+        for (int i = 0; i < Constantes.NUM_ARMAS; i++) {
+            int posInicialX = rn.nextInt(Constantes.MAPA_WIDTH);
+            int posInicialY = rn.nextInt(Constantes.MAPA_HEIGHT);
             if (rn.nextInt(2) == 0) {
-                armas.add(new Arma(5, 5, PISTOLA));
-
+                armas.add(new Arma(32, 32, PISTOLA, pistolaTexture, posInicialX, posInicialY));
             } else {
-                armas.add(new Arma(5, 5, FUZIL));
+                armas.add(new Arma(64, 13, FUZIL, fuzilTexture, posInicialX, posInicialY));
             }
-
         }
-
-        for (Arma arma : armas) {
-
-
-            arma.x = rn.nextInt(1200);
-            arma.y = rn.nextInt(700);
-
-            if (arma.getTipoArma() == PISTOLA) {
-                arma.setRetangulo(new Rectangle(arma.x, arma.y, 20, 20));
-            } else {
-                if (arma.getTipoArma() == FUZIL) {
-
-                    arma.setRetangulo(new Rectangle(arma.x, arma.y, 40, 40));
-                }
-
-            }
-
-
-        }
-
     }
 
     @Override
     public void handleInput() {
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-            character.x -= 200 * Gdx.graphics.getDeltaTime();
+            //jogador.x -= 200 * Gdx.graphics.getDeltaTime();
+            jogador.rotacionar(-20 * Gdx.graphics.getDeltaTime());
         }
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            character.x += 200 * Gdx.graphics.getDeltaTime();
+            jogador.rotacionar(20 * Gdx.graphics.getDeltaTime());
         }
         if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
-            character.y += 200 * Gdx.graphics.getDeltaTime();
+            jogador.andar(200 * Gdx.graphics.getDeltaTime());
         }
         if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-            character.y -= 200 * Gdx.graphics.getDeltaTime();
+            jogador.andar(-200 * Gdx.graphics.getDeltaTime());
         }
     }
 
     @Override
     public void update(float dt){
-        
+        System.out.println("Jogador: x = " + 
+                jogador.sprite.getX() + 
+                " y =  " + 
+                jogador.sprite.getY() + 
+                " theta = " + 
+                jogador.sprite.getRotation());
     }
     
     @Override
@@ -114,29 +101,14 @@ public class PlayState extends State {
         sb.begin();
 
 
-        sb.draw(characterTexture, character.getX(), character.getY());
+        jogador.sprite.draw(sb);
 
         Iterator<Arma> iter = armas.iterator();//Aqui podemos percorrer a lista de elementos graficos
         while (iter.hasNext()) {
             // aqui ficarao os ifs pertinentes a processamento grafico e logico
             Arma arma = iter.next();
 
-            if (arma.getTipoArma() == PISTOLA) {
-                sb.draw(pistolaTexture, arma.x, arma.y);
-            }
-
-
-            if (arma.getTipoArma() == FUZIL) {
-                sb.draw(fuzilTexture, arma.x, arma.y);
-            }
-
-
-            if (character.overlaps(arma.getRetangulo())) {
-
-                jogador.setArma(arma);
-                iter.remove();
-
-            }
+            arma.getSprite().draw(sb);
 
         }
         sb.end();

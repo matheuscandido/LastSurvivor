@@ -6,10 +6,6 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class LastSurvivor extends Game {
-	
-    public static int WIDTH = 1200;
-    public static int HEIGHT = 720;
-    public static String TITLE = "Gamedev Unknownd's Last Survivor";
     
     private GameStateManager gsm;
     private SpriteBatch batch;

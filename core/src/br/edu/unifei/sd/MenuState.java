@@ -39,8 +39,8 @@ public class MenuState extends State{
     @Override
     public void render(SpriteBatch sb) { //tirar o float dt
         sb.begin();
-        sb.draw(background, 0, 0, LastSurvivor.WIDTH, LastSurvivor.HEIGHT);
-        sb.draw(playButton, (LastSurvivor.WIDTH/2)-(playButton.getWidth()/2), (LastSurvivor.HEIGHT/2));
+        sb.draw(background, 0, 0, Constantes.MAPA_WIDTH, Constantes.MAPA_HEIGHT);
+        sb.draw(playButton, (Constantes.MAPA_WIDTH/2)-(playButton.getWidth()/2), (Constantes.MAPA_HEIGHT/2));
         sb.end();
         //-(playButton.getHeight()/2)
     }

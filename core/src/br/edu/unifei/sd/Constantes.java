@@ -13,4 +13,7 @@ public class Constantes {
     public static final int TIRO_ALTURA = 16;
     public static final int TIRO_LARGURA = 16;
     public static final int NUM_ARMAS = 10;
+    public static final int MAPA_WIDTH = 1200;
+    public static final int MAPA_HEIGHT = 700;
+    public static final String TITLE = "Gamedev Unknown's Last Survivor";
 }

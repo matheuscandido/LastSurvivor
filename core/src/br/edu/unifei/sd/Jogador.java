@@ -5,6 +5,9 @@
  */
 package br.edu.unifei.sd;
 
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+
 /**
  *
  * @author matheuscandido
@@ -15,8 +18,9 @@ public class Jogador extends Movel{
     private Arma arma;
     private Cliente cliente;
     
-    public Jogador(float largura, float altura) {
+    public Jogador(float largura, float altura, Texture texture, int posX, int posY) {
         super(largura, altura);
+        this.sprite = new Sprite(texture, posX, posY, (int)largura, (int)altura);
     }
     
     public void darComando(Comando comando){
@@ -25,6 +29,16 @@ public class Jogador extends Movel{
     
     public Tiro atirar(){
         return new Tiro(Constantes.TIRO_LARGURA, Constantes.TIRO_ALTURA, x, y, angulo, arma);
+    }
+    
+    public void andar(float r){
+        float addX = (float) Math.cos((double)this.sprite.getRotation()) * r;
+        float addY = (float) Math.sin((double)this.sprite.getRotation()) * r;
+        this.sprite.setPosition(this.sprite.getX() + addX, this.sprite.getY() + addY);
+    }
+    
+    public void rotacionar(float angulo){
+        this.sprite.setRotation(this.sprite.getRotation() + angulo);
     }
 
     public String getNickname() {
