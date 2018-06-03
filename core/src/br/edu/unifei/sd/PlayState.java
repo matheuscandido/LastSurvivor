@@ -46,7 +46,7 @@ public class PlayState extends State {
         pistolaTexture = new Texture(Gdx.files.internal("pistol.png"));
         fuzilTexture = new Texture(Gdx.files.internal("SVT-40.png"));
         mapa = new Mapa();
-
+        mapa.setElementosGraficos(new LinkedList());
 
         jogador = new Jogador(character.x, character.y);
 
@@ -58,7 +58,7 @@ public class PlayState extends State {
 
             if (rn.nextInt(2) == 0) {
                 armas.add(new Arma(5, 5, PISTOLA));
-
+                
             } else {
                 armas.add(new Arma(5, 5, FUZIL));
             }
@@ -73,10 +73,12 @@ public class PlayState extends State {
 
             if (arma.getTipoArma() == PISTOLA) {
                 arma.setRetangulo(new Rectangle(arma.x, arma.y, 20, 20));
+                mapa.addElementoGrafico(arma);
             } else {
                 if (arma.getTipoArma() == FUZIL) {
-
+                    
                     arma.setRetangulo(new Rectangle(arma.x, arma.y, 40, 40));
+                    mapa.addElementoGrafico(arma);
                 }
 
             }
@@ -116,28 +118,31 @@ public class PlayState extends State {
 
         sb.draw(characterTexture, character.getX(), character.getY());
 
-        Iterator<Arma> iter = armas.iterator();//Aqui podemos percorrer a lista de elementos graficos
+        Iterator<ElementoGrafico> iter = mapa.getElementosGraficos().iterator();//Aqui podemos percorrer a lista de elementos graficos
         while (iter.hasNext()) {
             // aqui ficarao os ifs pertinentes a processamento grafico e logico
-            Arma arma = iter.next();
-
-            if (arma.getTipoArma() == PISTOLA) {
-                sb.draw(pistolaTexture, arma.x, arma.y);
+            ElementoGrafico eg = iter.next();
+           
+           if(eg instanceof Arma){
+            if (((Arma) eg).getTipoArma()== PISTOLA) {
+               
+                sb.draw(pistolaTexture, eg.x, eg.y);
             }
 
 
-            if (arma.getTipoArma() == FUZIL) {
-                sb.draw(fuzilTexture, arma.x, arma.y);
+            if (((Arma) eg).getTipoArma() == FUZIL) {
+                sb.draw(fuzilTexture, eg.x, eg.y);
+            
             }
 
 
-            if (character.overlaps(arma.getRetangulo())) {
+            if (character.overlaps(((Arma) eg).getRetangulo())) {
 
-                jogador.setArma(arma);
+                jogador.setArma(((Arma) eg));
                 iter.remove();
 
             }
-
+           }
         }
         sb.end();
     }

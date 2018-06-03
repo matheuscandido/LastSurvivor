@@ -24,7 +24,7 @@ public class Cliente {
         return null;
     }
     
-    public boolean contectaServidor(Servidor servidor){
+    public boolean conectaServidor(Servidor servidor){
         return false;
     }
     
