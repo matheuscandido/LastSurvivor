@@ -21,7 +21,7 @@ public class LastSurvivor extends Game {
         gsm = new GameStateManager();
         gsm.push(new PlayState(gsm));
         
-        Gdx.gl.glClearColor(1, 0, 0, 1);
+        Gdx.gl.glClearColor(1, 1, 1, 1);
     }
 
     @Override
