@@ -38,8 +38,10 @@ public class Servidor {
 
         System.out.println("Subiu");
         kryonetServer.addListener(new Listener() {
+            
             public void received(Connection connection, Object object) {
                // Thread t = new Thread(() -> {
+                System.out.println("Entrada no listener servidor");
                     if (object instanceof Jogador) {
                    
                        jogadoresServidor.add((Jogador) object);

@@ -43,12 +43,13 @@ public class Cliente {
         System.out.println("Registrando...");
         Kryo kryo = kryonetClient.getKryo();
         kryo.register(Jogador.class);
-        kryonetClient.sendUDP(jogador);
+        kryonetClient.sendTCP(jogador);
         
     }
    
     public void listener(Connection connection, Object object){
-       
+    
+        System.out.println("Entrando no listener");
         kryonetClient.addListener(new Listener(){
             @Override
             public void received (Connection connection, Object object) {
@@ -59,7 +60,7 @@ public class Cliente {
           }
        }
         });
-        
+      
     }
     
     public void refresh(){
@@ -67,4 +68,5 @@ public class Cliente {
         
         
     }
+    
 }

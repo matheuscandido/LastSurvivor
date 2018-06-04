@@ -49,11 +49,13 @@ public class PlayState extends State {
         fuzilTexture = new Texture(Gdx.files.internal("SVT-40.png"));
       
         mapa = new Mapa();
+        mapa.setElementosGraficos(new LinkedList());
+
         jogador = new Jogador(character.x, character.y);
         cliente.descobreServidor();
         cliente.conectaServidor(jogador);//conectaServidor envia jogador para o servidor
-
-        
+        System.out.println("Jogador enviado");
+        mapa.addElementoGrafico(jogador);
         for(Jogador player : cliente.jogadores){
         //acrescenta lista atualizada no mapa
          mapa.addElementoGrafico(player);
@@ -82,10 +84,12 @@ public class PlayState extends State {
 
             if (arma.getTipoArma() == PISTOLA) {
                 arma.setRetangulo(new Rectangle(arma.x, arma.y, 20, 20));
+                mapa.addElementoGrafico(arma);
             } else {
                 if (arma.getTipoArma() == FUZIL) {
 
                     arma.setRetangulo(new Rectangle(arma.x, arma.y, 40, 40));
+                    mapa.addElementoGrafico(arma);
                 }
 
             }
