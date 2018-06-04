@@ -5,6 +5,7 @@
  */
 package br.edu.unifei.sd;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 
@@ -32,7 +33,12 @@ public class Jogador extends Movel{
         return new Tiro(Constantes.TIRO_LARGURA, Constantes.TIRO_ALTURA, x, y, angulo, arma);
     }
     
-    public void andar(float r){
+    public void andar(float x, float y, float angulo){
+        this.sprite.setPosition(this.sprite.getX() + x * Gdx.graphics.getDeltaTime(), this.sprite.getY() + y * Gdx.graphics.getDeltaTime() );
+        this.sprite.setRotation(angulo);
+    }
+    
+    public void andarEsferico(float r){
         float addX = (float) Math.cos((double)this.sprite.getRotation()) * r;
         float addY = (float) Math.sin((double)this.sprite.getRotation()) * r;
         this.sprite.setPosition(this.sprite.getX() + addX, this.sprite.getY() + addY);

@@ -75,18 +75,44 @@ public class PlayState extends State {
 
     @Override
     public void handleInput() {
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-            jogador.rotacionar(-(200 * Gdx.graphics.getDeltaTime()));
+        if(Gdx.input.isKeyPressed(Input.Keys.LEFT) && Gdx.input.isKeyPressed(Input.Keys.UP)){
+            jogador.andar(-200, 200, 135f);
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            jogador.rotacionar(200 * Gdx.graphics.getDeltaTime());
+        if(Gdx.input.isKeyPressed(Input.Keys.LEFT) && Gdx.input.isKeyPressed(Input.Keys.DOWN)){
+            jogador.andar(-200, -200, 225f);
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
-            jogador.andar(200 * Gdx.graphics.getDeltaTime());
+        if(Gdx.input.isKeyPressed(Input.Keys.RIGHT) && Gdx.input.isKeyPressed(Input.Keys.UP)){
+            jogador.andar(200, 200, 45f);
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-            jogador.andar(-200 * Gdx.graphics.getDeltaTime());
+        if(Gdx.input.isKeyPressed(Input.Keys.RIGHT) && Gdx.input.isKeyPressed(Input.Keys.DOWN)){
+            jogador.andar(200, -200, 315f);
         }
+        
+        if(Gdx.input.isKeyPressed(Input.Keys.UP)){
+            jogador.andar(0, 200, 90f);
+        }
+        if(Gdx.input.isKeyPressed(Input.Keys.DOWN)){
+            jogador.andar(0, -200, 270f);
+        }
+        if(Gdx.input.isKeyPressed(Input.Keys.LEFT)){
+            jogador.andar(-200, 0, 180f);
+        }
+        if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)){
+            jogador.andar(200, 0, 0f);
+        }
+        
+//        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+//            jogador.rotacionar(-(200 * Gdx.graphics.getDeltaTime()));
+//        }
+//        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+//            jogador.rotacionar(200 * Gdx.graphics.getDeltaTime());
+//        }
+//        if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
+//            jogador.andar(200 * Gdx.graphics.getDeltaTime());
+//        }
+//        if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+//            jogador.andar(-200 * Gdx.graphics.getDeltaTime());
+//        }
     }
 
     @Override
