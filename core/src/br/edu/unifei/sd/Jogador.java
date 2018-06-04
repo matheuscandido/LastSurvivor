@@ -20,7 +20,7 @@ public class Jogador extends Movel{
     
     public Jogador(float largura, float altura, Texture texture, int posX, int posY) {
         super(largura, altura);
-        this.sprite = new Sprite(texture);
+        sprite = new Sprite(texture);
         sprite.setScale(0.4f);
     }
     
@@ -39,7 +39,7 @@ public class Jogador extends Movel{
     }
     
     public void rotacionar(float angulo){
-        this.sprite.setRotation(this.sprite.getRotation() + angulo);
+        this.sprite.setRotation(this.sprite.getRotation() + (-angulo));
     }
 
     public String getNickname() {

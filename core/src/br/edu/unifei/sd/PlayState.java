@@ -31,6 +31,7 @@ public class PlayState extends State {
 
     Jogador jogador;
     Sprite mapSprite;
+    
 
     public PlayState(GameStateManager gsm) {
         super(gsm);
@@ -43,12 +44,12 @@ public class PlayState extends State {
         
         mapa = new Mapa();
         mapSprite = new Sprite(mapTexture);
-        mapSprite.setPosition(-1000, -1000);
+        mapSprite.setPosition((-mapTexture.getWidth())/2, (-mapTexture.getHeight())/2);
 
         System.out.println("Critou jogador");
         jogador = new Jogador(
-                0, 
-                0,
+                rn.nextInt(Constantes.MAPA_WIDTH), 
+                rn.nextInt(Constantes.MAPA_HEIGHT),
                 characterTexture,
                 220,
                 220
@@ -57,7 +58,7 @@ public class PlayState extends State {
         
         // Configura a camera para ?
         camera.setToOrtho(false, Constantes.MAPA_WIDTH, Constantes.MAPA_HEIGHT);
-        camera.position.set(0, 0, 0);
+        camera.position.set(jogador.sprite.getX(), jogador.sprite.getY(), 0);
         camera.update();
         
         // Adiciona novas armas ao vetor de armas
@@ -75,7 +76,7 @@ public class PlayState extends State {
     @Override
     public void handleInput() {
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-            jogador.rotacionar(-200 * Gdx.graphics.getDeltaTime());
+            jogador.rotacionar(-(200 * Gdx.graphics.getDeltaTime()));
         }
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
             jogador.rotacionar(200 * Gdx.graphics.getDeltaTime());
