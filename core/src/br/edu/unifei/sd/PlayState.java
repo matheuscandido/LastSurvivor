@@ -45,13 +45,13 @@ public class PlayState extends State {
         mapSprite = new Sprite(mapTexture);
         mapSprite.setPosition(-1000, -1000);
 
-        System.out.println("Critou jogador");
+        System.out.println("Criou jogador");
         jogador = new Jogador(
                 0, 
                 0,
                 characterTexture,
-                220,
-                220
+                200,
+                200
         );
         System.out.println("Jogador ang" + jogador.sprite.getRotation());
         
@@ -75,10 +75,10 @@ public class PlayState extends State {
     @Override
     public void handleInput() {
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-            jogador.rotacionar(-200 * Gdx.graphics.getDeltaTime());
+            jogador.rotacionar(200 * Gdx.graphics.getDeltaTime());
         }
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            jogador.rotacionar(200 * Gdx.graphics.getDeltaTime());
+            jogador.rotacionar(-200 * Gdx.graphics.getDeltaTime());
         }
         if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
             jogador.andar(200 * Gdx.graphics.getDeltaTime());
