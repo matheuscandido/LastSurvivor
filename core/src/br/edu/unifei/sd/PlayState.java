@@ -23,7 +23,7 @@ import java.util.Random;
  */
 public class PlayState extends State {
 
-    private Texture characterTexture, pistolaTexture, fuzilTexture, mapTexture;
+    private Texture characterTexture, characterPistolaTexture, characterFuzilTexture, pistolaTexture, fuzilTexture, mapTexture;
     private Mapa mapa;
     float tempo = 0;
     Random rn = new Random();
@@ -38,6 +38,9 @@ public class PlayState extends State {
         
         // Inicializando as coisas
         characterTexture = new Texture(Gdx.files.internal("survivor-knife.png"));
+        characterPistolaTexture = new Texture(Gdx.files.internal("survivor-pistol.png"));
+        characterFuzilTexture = new Texture(Gdx.files.internal("survivor-rifle.png"));
+        
         pistolaTexture = new Texture(Gdx.files.internal("pistol.png"));
         fuzilTexture = new Texture(Gdx.files.internal("SVT-40.png"));
         mapTexture = new Texture(Gdx.files.internal("map.jpg"));
@@ -111,9 +114,20 @@ public class PlayState extends State {
             // aqui ficarao os ifs pertinentes a processamento grafico e logico
             Arma arma = iter.next();
             
+            //Se o jogador passa por uma arma
             if(jogador.getSprite().getBoundingRectangle().overlaps(arma.getSprite().getBoundingRectangle())){
-                jogador.setArma(arma);
-                iter.remove();
+                
+                if(Gdx.input.isKeyJustPressed(Input.Keys.ENTER)){
+                    jogador.setArma(arma);
+                    //Muda a textura do jogador de acordo com a arma
+                    if(jogador.getArma().getTipoArma() == null)
+                        jogador.getSprite().setTexture(characterTexture);
+                    if(jogador.getArma().getTipoArma() == TipoArma.PISTOLA)
+                        jogador.getSprite().setTexture(characterPistolaTexture);
+                    if(jogador.getArma().getTipoArma() == TipoArma.FUZIL)
+                        jogador.getSprite().setTexture(characterFuzilTexture);
+                    iter.remove();
+                }
             } else {
                 arma.getSprite().draw(sb);
             }
