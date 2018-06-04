@@ -21,7 +21,8 @@ public class Arma extends Fixo{
     public Arma(float largura, float altura, TipoArma tipoArma, Texture texture, int x, int y) {
         super(largura, altura);
         this.tipoArma = tipoArma;
-        this.sprite = new Sprite(texture, x, y, (int)largura, (int)altura);
+        this.sprite = new Sprite(texture);
+        this.sprite.setPosition(x, y);
     }
 
     public TipoArma getTipoArma() {

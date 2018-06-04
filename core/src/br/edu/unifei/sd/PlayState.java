@@ -96,12 +96,16 @@ public class PlayState extends State {
     @Override
     public void render(SpriteBatch sb) {
         handleInput();
+        
         camera.position.set(jogador.sprite.getX(), jogador.sprite.getY(), 0);
         camera.update();
+        
         sb.setProjectionMatrix(camera.combined);
         sb.begin();
+        
         mapSprite.draw(sb);
         jogador.sprite.draw(sb);
+        
         Iterator<Arma> iter = armas.iterator();//Aqui podemos percorrer a lista de elementos graficos
         while (iter.hasNext()) {
             // aqui ficarao os ifs pertinentes a processamento grafico e logico
