@@ -33,8 +33,8 @@ public class Jogador extends Movel{
     }
     float addX,addY;
     public void andar(float r){
-        addX = (float) Math.cos((double)this.sprite.getRotation()%360) * r;
-        addY = (float) Math.sin((double)this.sprite.getRotation()%360) * r;
+        addX = (float) Math.cos(Math.toRadians((double)this.sprite.getRotation()%360)) * r;
+        addY = (float) Math.sin(Math.toRadians((double)this.sprite.getRotation()%360)) * r;
         
         System.err.println("(x: " + sprite.getX() + ", dx: " + addX + "\t" + 
                "(y: " + sprite.getY() + ", dy: " + addY + "\t" +
