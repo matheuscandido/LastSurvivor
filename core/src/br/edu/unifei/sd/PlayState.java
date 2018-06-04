@@ -110,7 +110,13 @@ public class PlayState extends State {
         while (iter.hasNext()) {
             // aqui ficarao os ifs pertinentes a processamento grafico e logico
             Arma arma = iter.next();
-            arma.getSprite().draw(sb);
+            
+            if(jogador.getSprite().getBoundingRectangle().overlaps(arma.getSprite().getBoundingRectangle())){
+                jogador.setArma(arma);
+                iter.remove();
+            } else {
+                arma.getSprite().draw(sb);
+            }
         }
         sb.end();
     }
