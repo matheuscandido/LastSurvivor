@@ -12,6 +12,10 @@ package br.edu.unifei.sd;
 public class Movel extends ElementoGrafico{
     protected float angulo;
     protected float movementRate;
+    
+    public Movel(){
+    
+}
 
     public Movel(float largura, float altura) {
         super(largura, altura);

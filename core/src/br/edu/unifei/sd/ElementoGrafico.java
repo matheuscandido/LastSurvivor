@@ -12,8 +12,13 @@ package br.edu.unifei.sd;
 public abstract class ElementoGrafico {
     protected float x;
     protected float y;
-    private final float altura;
+    private final float altura ; 
     private final float largura;
+    
+    public ElementoGrafico(){
+        altura = 100; 
+        largura = 100;
+    }
     
     public ElementoGrafico(float largura, float altura){
         this.altura = altura;

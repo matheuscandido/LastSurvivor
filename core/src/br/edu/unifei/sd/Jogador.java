@@ -17,6 +17,8 @@ public class Jogador extends Movel{
     private Arma arma;
     private Cliente cliente;
  
+    public Jogador(){
+    }
             
     public Jogador(float largura, float altura) {
         super(largura, altura);

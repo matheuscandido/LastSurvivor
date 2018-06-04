@@ -43,7 +43,9 @@ public class Cliente {
         System.out.println("Registrando...");
         Kryo kryo = kryonetClient.getKryo();
         kryo.register(Jogador.class);
+        System.err.println("REgistrado... Enviando - cliente");
         kryonetClient.sendTCP(jogador);
+        System.err.println("Enviado cliente");
         
     }
    
