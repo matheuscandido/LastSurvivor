@@ -33,19 +33,24 @@ public class Jogador extends Movel{
         return new Tiro(Constantes.TIRO_LARGURA, Constantes.TIRO_ALTURA, x, y, angulo, arma);
     }
     
-    public void andar(float x, float y, float angulo){
-        this.sprite.setPosition(this.sprite.getX() + x * Gdx.graphics.getDeltaTime(), this.sprite.getY() + y * Gdx.graphics.getDeltaTime() );
-        this.sprite.setRotation(angulo);
-    }
-    
-    public void andarEsferico(float r){
-        float addX = (float) Math.cos((double)this.sprite.getRotation()) * r;
-        float addY = (float) Math.sin((double)this.sprite.getRotation()) * r;
+    float addX,addY;
+    public void andar(float r){
+        addX = (float) Math.cos(Math.toRadians((double)this.sprite.getRotation()%360)) * r;
+        addY = (float) Math.sin(Math.toRadians((double)this.sprite.getRotation()%360)) * r;
+        
+        System.err.println("(x: " + sprite.getX() + ", dx: " + addX + "\t" + 
+               "(y: " + sprite.getY() + ", dy: " + addY + "\t" +
+                "deg: " +sprite.getRotation()+ ", dd: 0" + ")");
         this.sprite.setPosition(this.sprite.getX() + addX, this.sprite.getY() + addY);
     }
     
     public void rotacionar(float angulo){
-        this.sprite.setRotation(this.sprite.getRotation() + (-angulo));
+        float deg = (this.sprite.getRotation() + angulo)%360;
+        this.sprite.setRotation(deg);
+        
+        System.err.println("(x: " + sprite.getX() + ", dx: " + addX + ")\t" + 
+               "(y: " + sprite.getY() + ", dy: " + addY + ")\t" +
+                "(deg: " +sprite.getRotation()+ ", dd: " + angulo +")");
     }
 
     public String getNickname() {
