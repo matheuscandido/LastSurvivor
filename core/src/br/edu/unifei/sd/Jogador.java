@@ -20,7 +20,8 @@ public class Jogador extends Movel{
     
     public Jogador(float largura, float altura, Texture texture, int posX, int posY) {
         super(largura, altura);
-        this.sprite = new Sprite(texture, posX, posY, (int)largura, (int)altura);
+        this.sprite = new Sprite(texture);
+        sprite.setScale(0.4f);
     }
     
     public void darComando(Comando comando){

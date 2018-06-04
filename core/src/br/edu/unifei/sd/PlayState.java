@@ -5,17 +5,15 @@
  */
 package br.edu.unifei.sd;
 
-import static br.edu.unifei.sd.Constantes.NUM_ARMAS;
 import static br.edu.unifei.sd.TipoArma.FUZIL;
 import static br.edu.unifei.sd.TipoArma.PISTOLA;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Rectangle;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
@@ -25,13 +23,14 @@ import java.util.Random;
  */
 public class PlayState extends State {
 
-    private Texture characterTexture, pistolaTexture, fuzilTexture;
+    private Texture characterTexture, pistolaTexture, fuzilTexture, mapTexture;
     private Mapa mapa;
     float tempo = 0;
     Random rn = new Random();
     private List<Arma> armas = new ArrayList<Arma>();
 
     Jogador jogador;
+    Sprite mapSprite;
 
     public PlayState(GameStateManager gsm) {
         super(gsm);
@@ -40,9 +39,13 @@ public class PlayState extends State {
         characterTexture = new Texture(Gdx.files.internal("survivor-knife.png"));
         pistolaTexture = new Texture(Gdx.files.internal("pistol.png"));
         fuzilTexture = new Texture(Gdx.files.internal("SVT-40.png"));
+        mapTexture = new Texture(Gdx.files.internal("map.jpg"));
         
         mapa = new Mapa();
+        mapSprite = new Sprite(mapTexture);
+        mapSprite.setPosition(-1000, -1000);
 
+        System.out.println("Critou jogador");
         jogador = new Jogador(
                 0, 
                 0,
@@ -50,10 +53,11 @@ public class PlayState extends State {
                 220,
                 220
         );
+        System.out.println("Jogador ang" + jogador.sprite.getRotation());
         
         // Configura a camera para ?
-        camera.setToOrtho(false, Constantes.MAPA_WIDTH/4, Constantes.MAPA_HEIGHT/4);
-        camera.position.set(jogador.getSprite().getX(), jogador.getSprite().getY(), 0);
+        camera.setToOrtho(false, Constantes.MAPA_WIDTH, Constantes.MAPA_HEIGHT);
+        camera.position.set(0, 0, 0);
         camera.update();
         
         // Adiciona novas armas ao vetor de armas
@@ -71,49 +75,37 @@ public class PlayState extends State {
     @Override
     public void handleInput() {
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-            //jogador.x -= 200 * Gdx.graphics.getDeltaTime();
-            jogador.rotacionar(-20 * Gdx.graphics.getDeltaTime());
+            jogador.rotacionar(-200 * Gdx.graphics.getDeltaTime());
         }
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            jogador.rotacionar(20 * Gdx.graphics.getDeltaTime());
+            jogador.rotacionar(200 * Gdx.graphics.getDeltaTime());
         }
         if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
             jogador.andar(200 * Gdx.graphics.getDeltaTime());
-            camera.translate(jogador.sprite.getX(), jogador.sprite.getY());
         }
         if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
             jogador.andar(-200 * Gdx.graphics.getDeltaTime());
-            camera.translate(jogador.sprite.getX(), jogador.sprite.getY());
         }
     }
 
     @Override
     public void update(float dt){
-        System.out.println("Jogador: x = " + 
-                jogador.sprite.getX() + 
-                " y =  " + 
-                jogador.sprite.getY() + 
-                " theta = " + 
-                jogador.sprite.getRotation());
     }
     
     @Override
     public void render(SpriteBatch sb) {
         handleInput();
+        camera.position.set(jogador.sprite.getX(), jogador.sprite.getY(), 0);
         camera.update();
         sb.setProjectionMatrix(camera.combined);
         sb.begin();
-
-
+        mapSprite.draw(sb);
         jogador.sprite.draw(sb);
-
         Iterator<Arma> iter = armas.iterator();//Aqui podemos percorrer a lista de elementos graficos
         while (iter.hasNext()) {
             // aqui ficarao os ifs pertinentes a processamento grafico e logico
             Arma arma = iter.next();
-
             arma.getSprite().draw(sb);
-
         }
         sb.end();
     }
