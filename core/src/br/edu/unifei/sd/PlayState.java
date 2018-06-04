@@ -78,6 +78,7 @@ public class PlayState extends State {
 
     @Override
     public void handleInput() {
+        // Movimentação do jogador
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
             jogador.rotacionar(200 * Gdx.graphics.getDeltaTime());
         }
@@ -89,6 +90,11 @@ public class PlayState extends State {
         }
         if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
             jogador.andar(-200 * Gdx.graphics.getDeltaTime());
+        }
+        
+        // Tiro
+        if(Gdx.input.isKeyPressed(Input.Keys.SPACE)){
+            // fazer algo
         }
     }
 
