@@ -13,6 +13,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -32,10 +33,11 @@ public class PlayState extends State {
     float tempo = 0;
     Random rn = new Random();
     private List<Arma> armas = new ArrayList<Arma>();
-
+    private Cliente cliente = new Cliente();
+    
     Jogador jogador;
 
-    public PlayState(GameStateManager gsm) {
+    public PlayState(GameStateManager gsm) throws IOException {
         super(gsm);
         character = new Rectangle(10, 10, 200, 200);
 
@@ -45,13 +47,20 @@ public class PlayState extends State {
         characterTexture = new Texture(Gdx.files.internal("survivor-knife.png"));
         pistolaTexture = new Texture(Gdx.files.internal("pistol.png"));
         fuzilTexture = new Texture(Gdx.files.internal("SVT-40.png"));
+      
         mapa = new Mapa();
-
-
         jogador = new Jogador(character.x, character.y);
+        cliente.descobreServidor();
+        cliente.conectaServidor(jogador);//conectaServidor envia jogador para o servidor
 
-
-
+        
+        for(Jogador player : cliente.jogadores){
+        //acrescenta lista atualizada no mapa
+         mapa.addElementoGrafico(player);
+        
+        
+        }
+        
         camera.setToOrtho(false, LastSurvivor.WIDTH/2, LastSurvivor.HEIGHT/2);
 
         for (int i = 0; i < NUM_ARMAS; i++) {
@@ -104,6 +113,16 @@ public class PlayState extends State {
 
     @Override
     public void update(float dt){
+        //implementa refresh, atualiza lista de jogadores
+        
+        for(Jogador player : cliente.jogadores){
+        //acrescenta lista atualizada no mapa
+         mapa.addElementoGrafico(player);
+        
+        
+        }
+        
+        
         
     }
     
@@ -114,30 +133,36 @@ public class PlayState extends State {
         sb.begin();
 
 
-        sb.draw(characterTexture, character.getX(), character.getY());
+       //sb.draw(characterTexture, character.getX(), character.getY());
 
-        Iterator<Arma> iter = armas.iterator();//Aqui podemos percorrer a lista de elementos graficos
+       Iterator<ElementoGrafico> iter = mapa.getElementosGraficos().iterator();
         while (iter.hasNext()) {
             // aqui ficarao os ifs pertinentes a processamento grafico e logico
-            Arma arma = iter.next();
-
-            if (arma.getTipoArma() == PISTOLA) {
-                sb.draw(pistolaTexture, arma.x, arma.y);
+            ElementoGrafico eg = iter.next();
+           if(eg instanceof Arma){ 
+            if (((Arma) eg).getTipoArma()== PISTOLA) {
+                sb.draw(pistolaTexture, eg.x, eg.y);
             }
 
 
-            if (arma.getTipoArma() == FUZIL) {
-                sb.draw(fuzilTexture, arma.x, arma.y);
+            if (((Arma) eg).getTipoArma() == FUZIL) {
+               sb.draw(fuzilTexture, eg.x, eg.y);
             }
 
 
-            if (character.overlaps(arma.getRetangulo())) {
+            if (character.overlaps(((Arma) eg).getRetangulo())) {
 
-                jogador.setArma(arma);
+                jogador.setArma(((Arma) eg));
                 iter.remove();
-
             }
-
+            
+           }
+           
+           if(eg instanceof Jogador){
+           
+                sb.draw(characterTexture, eg.x, eg.y);
+                
+           }
         }
         sb.end();
     }

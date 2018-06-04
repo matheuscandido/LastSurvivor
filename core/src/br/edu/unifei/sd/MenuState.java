@@ -9,6 +9,9 @@ import br.edu.unifei.sd.LastSurvivor;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 public class MenuState extends State{
@@ -26,7 +29,11 @@ public class MenuState extends State{
     @Override
     public void handleInput() {
         if(Gdx.input.justTouched()){
-            gsm.set(new PlayState(gsm));
+            try {
+                gsm.set(new PlayState(gsm));
+            } catch (IOException ex) {
+                Logger.getLogger(MenuState.class.getName()).log(Level.SEVERE, null, ex);
+            }
             dispose();
         }
     }

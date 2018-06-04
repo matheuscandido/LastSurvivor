@@ -14,6 +14,7 @@ import java.util.Timer;
  * @author matheuscandido
  */
 public class Mapa {
+
     private float largura;
     private float altura;
     private Timer escalonadorReducao;
@@ -28,23 +29,17 @@ public class Mapa {
     }
     private LinkedList<Cliente> clientes;
     private Servidor servidor;
-    
-    
-    
- public void   addElementoGrafico(ElementoGrafico eg){
- 
+   
 
-  elementosGraficos.add(eg);
- 
- 
- }
- 
- 
- public void addCliente(Cliente cliente){
- 
- 
-     clientes.add(cliente);
- }
- 
- 
+    public void addElementoGrafico(ElementoGrafico eg) {
+
+        elementosGraficos.add(eg);
+
+    }
+
+    public void addCliente(Cliente cliente) {
+
+        clientes.add(cliente);
+    }
+
 }

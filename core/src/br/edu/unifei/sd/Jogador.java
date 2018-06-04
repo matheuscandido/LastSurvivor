@@ -5,6 +5,8 @@
  */
 package br.edu.unifei.sd;
 
+import com.badlogic.gdx.math.Rectangle;
+
 /**
  *
  * @author matheuscandido
@@ -14,7 +16,8 @@ public class Jogador extends Movel{
     private String nickname;
     private Arma arma;
     private Cliente cliente;
-    
+ 
+            
     public Jogador(float largura, float altura) {
         super(largura, altura);
     }
