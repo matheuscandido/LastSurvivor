@@ -52,8 +52,9 @@ public class PlayState extends State {
         );
         
         // Configura a camera para ?
-        camera.setToOrtho(false, Constantes.MAPA_WIDTH/2, Constantes.MAPA_HEIGHT/2);
-
+        camera.setToOrtho(false, Constantes.MAPA_WIDTH/4, Constantes.MAPA_HEIGHT/4);
+        camera.position.set(jogador.getSprite().getX(), jogador.getSprite().getY(), 0);
+        camera.update();
         
         // Adiciona novas armas ao vetor de armas
         for (int i = 0; i < Constantes.NUM_ARMAS; i++) {
@@ -78,9 +79,11 @@ public class PlayState extends State {
         }
         if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
             jogador.andar(200 * Gdx.graphics.getDeltaTime());
+            camera.translate(jogador.sprite.getX(), jogador.sprite.getY());
         }
         if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
             jogador.andar(-200 * Gdx.graphics.getDeltaTime());
+            camera.translate(jogador.sprite.getX(), jogador.sprite.getY());
         }
     }
 
@@ -96,8 +99,9 @@ public class PlayState extends State {
     
     @Override
     public void render(SpriteBatch sb) {
-        sb.setProjectionMatrix(camera.combined);
         handleInput();
+        camera.update();
+        sb.setProjectionMatrix(camera.combined);
         sb.begin();
 
 
