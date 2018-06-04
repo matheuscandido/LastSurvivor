@@ -5,11 +5,15 @@
  */
 package br.edu.unifei.sd;
 
+import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Connection;
 import java.net.InetAddress;
 import java.util.ArrayList;
 
 import com.esotericsoftware.kryonet.Client;
+import com.esotericsoftware.kryonet.Listener;
+import java.io.IOException;
+import java.util.LinkedList;
 
 /**
  *
@@ -18,18 +22,46 @@ import com.esotericsoftware.kryonet.Client;
 public class Cliente {
     private Jogador jogador;
     private InetAddress endereco;
-    private Client kryonetClient;
+    private Client kryonetClient;    
+    public  LinkedList<Jogador> jogadores = new LinkedList();
+    private static final int TCP = 6660, UDP = 6661, TIMEOUT = 500000;
+    
     
     public ArrayList<Servidor> descobreServidor(){
+        System.out.println("Procurando Server...");
+        endereco = kryonetClient.discoverHost(UDP, TIMEOUT);
+        System.out.println("Servidor encontrado em: " + endereco.getHostAddress());
         return null;
     }
     
-    public boolean contectaServidor(Servidor servidor){
-        return false;
-    }
-    
-    public void listener(Connection connection, Object object){
+    public void conectaServidor(Jogador jogador) throws IOException{
         
+        System.out.println("Conectando...");
+        kryonetClient.start();
+        kryonetClient.connect(TIMEOUT, endereco, TCP, UDP);
+        System.out.println("Registrando...");
+        Kryo kryo = kryonetClient.getKryo();
+        kryo.register(Jogador.class);
+        System.err.println("REgistrado... Enviando - cliente");
+        kryonetClient.sendTCP(jogador);
+        System.err.println("Enviado cliente");
+        
+    }
+   
+    public void listener(Connection connection, Object object){
+    
+        System.out.println("Entrando no listener");
+        kryonetClient.addListener(new Listener(){
+            @Override
+            public void received (Connection connection, Object object) {
+          if (object instanceof Jogador) {
+              System.out.println("Trolha em processo de recuperacao");
+              jogadores.add((Jogador) object);
+              System.out.println("Trolha recebida");
+          }
+       }
+        });
+      
     }
     
     public void refresh(){
