@@ -23,6 +23,9 @@ public class Jogador extends Movel{
         super(largura, altura);
         sprite = new Sprite(texture);
         sprite.setScale(0.4f);
+        //MUITO IMPORTANTE!!!! Mandando referencia para cliente
+        cliente = new Cliente();
+        cliente.setJogador(this);
     }
     
     public void darComando(Comando comando){
@@ -65,9 +68,19 @@ public class Jogador extends Movel{
         return arma;
     }
 
+    
+
     public void setArma(Arma arma) {
         this.arma = arma;
     }
+
+    public Cliente getCliente() {
+        return cliente;
+    }
+
+//    public void setCliente(Cliente cliente) {
+//        this.cliente = cliente;
+//    }
     
     
     

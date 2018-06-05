@@ -21,16 +21,19 @@ import java.util.LinkedList;
  */
 public class Cliente {
     private Jogador jogador;
-    private InetAddress endereco;
+    private InetAddress enderecoServidor, meuEndereco;
     private Client kryonetClient;    
     public  LinkedList<Jogador> jogadores = new LinkedList();
     private static final int TCP = 6660, UDP = 6661, TIMEOUT = 500000;
     
+    public Cliente(){
+        
+    }
     
     public ArrayList<Servidor> descobreServidor(){
         System.out.println("Procurando Server...");
-        endereco = kryonetClient.discoverHost(UDP, TIMEOUT);
-        System.out.println("Servidor encontrado em: " + endereco.getHostAddress());
+        enderecoServidor = kryonetClient.discoverHost(UDP, TIMEOUT);
+        System.out.println("Servidor encontrado em: " + enderecoServidor.getHostAddress());
         return null;
     }
     
@@ -38,13 +41,14 @@ public class Cliente {
         
         System.out.println("Conectando...");
         kryonetClient.start();
-        kryonetClient.connect(TIMEOUT, endereco, TCP, UDP);
+        kryonetClient.connect(TIMEOUT, enderecoServidor, TCP, UDP);
         System.out.println("Registrando...");
         Kryo kryo = kryonetClient.getKryo();
         kryo.register(Jogador.class);
         System.err.println("REgistrado... Enviando - cliente");
         kryonetClient.sendTCP(jogador);
         System.err.println("Enviado cliente");
+        meuEndereco = InetAddress.getLocalHost();
         
     }
    
@@ -63,8 +67,25 @@ public class Cliente {
         });
       
     }
+
+    public Jogador getJogador() {
+        return jogador;
+    }
+
+    public void setJogador(Jogador jogador) {
+        this.jogador = jogador;
+    }
     
     public void refresh(){
         
     }
+
+    public InetAddress getEnderecoServidor() {
+        return enderecoServidor;
+    }
+
+    public InetAddress getMeuEndereco() {
+        return meuEndereco;
+    }
+    
 }
