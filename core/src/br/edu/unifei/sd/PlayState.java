@@ -82,10 +82,16 @@ public class PlayState extends State {
             int posInicialY = rn.nextInt(Constantes.MAPA_HEIGHT);
             if (rn.nextInt(2) == 0) {
                 armas.add(new Arma(32, 32, PISTOLA, pistolaTexture, posInicialX, posInicialY));
+               
             } else {
                 armas.add(new Arma(64, 13, FUZIL, fuzilTexture, posInicialX, posInicialY));
             }
         }
+        
+        
+        
+        
+        
     }
 
     @Override
@@ -127,18 +133,18 @@ public class PlayState extends State {
         mapSprite.draw(sb);
         jogador.sprite.draw(sb);
         
-        Iterator<Arma> iter = armas.iterator();//Aqui podemos percorrer a lista de elementos graficos
+        Iterator<ElementoGrafico> iter = mapa.getElementosGraficos().iterator();//Aqui podemos percorrer a lista de elementos graficos
         while (iter.hasNext()) {
             // aqui ficarao os ifs pertinentes a processamento grafico e logico
-            Arma arma = iter.next();
+            ElementoGrafico eg = iter.next();
             
             //Se o jogador passa por uma arma
-            if(jogador.getSprite().getBoundingRectangle().overlaps(arma.getSprite().getBoundingRectangle())){
+            if(jogador.getSprite().getBoundingRectangle().overlaps(eg.getSprite().getBoundingRectangle())){
                 
                 font.draw(sb, "GET GUN [ENTER]", jogador.getSprite().getX() + 60, jogador.getSprite().getY() + 180);
-                
+                if(eg instanceof Arma){
                 if(Gdx.input.isKeyJustPressed(Input.Keys.ENTER)){
-                    jogador.setArma(arma);
+                    jogador.setArma((Arma) eg);
                     //Muda a textura do jogador de acordo com a arma
                     if(jogador.getArma().getTipoArma() == null)
                         jogador.getSprite().setTexture(characterTexture);
@@ -148,9 +154,11 @@ public class PlayState extends State {
                         jogador.getSprite().setTexture(characterFuzilTexture);
                     iter.remove();
                 }
+                
             } else {
-                arma.getSprite().draw(sb);
+                eg.getSprite().draw(sb);
             }
+          }
         }
         sb.end();
     }
