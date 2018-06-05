@@ -15,7 +15,7 @@ public class Jogador extends Movel{
     
     private String nickname;
     private Arma arma;
-    private Cliente cliente;
+   // private Cliente cliente;
  
     public Jogador(){
     }

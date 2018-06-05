@@ -19,6 +19,8 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -117,8 +119,12 @@ public class PlayState extends State {
 
     @Override
     public void update(float dt){
-        //implementa refresh, atualiza lista de jogadores
-        
+        try {
+            //implementa refresh, atualiza lista de jogadores
+            cliente.conectaServidor(jogador);
+        } catch (IOException ex) {
+            Logger.getLogger(PlayState.class.getName()).log(Level.SEVERE, null, ex);
+        }
         for(Jogador player : cliente.jogadores){
         //acrescenta lista atualizada no mapa
          mapa.addElementoGrafico(player);

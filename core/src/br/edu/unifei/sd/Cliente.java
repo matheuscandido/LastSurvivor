@@ -5,6 +5,7 @@
  */
 package br.edu.unifei.sd;
 
+import com.badlogic.gdx.math.Rectangle;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Connection;
 import java.net.InetAddress;
@@ -27,23 +28,32 @@ public class Cliente {
     private Client kryonetClient = new Client();
     private static final int TCP = 6660, UDP = 6661, TIMEOUT = 500000;
     
-    public void descobreServidor(){
-       
+    public void descobreServidor() throws IOException{
+        
+        System.out.println("Conectando...");
+        kryonetClient.start();
         System.out.println("Procurando Server...");
         endereco = kryonetClient.discoverHost(UDP, TIMEOUT);
         System.out.println("Servidor encontrado em: " + endereco.getHostAddress());
+        System.out.println("Registrando...");
+        kryonetClient.connect(TIMEOUT, endereco, TCP, UDP);
+        Kryo kryo = kryonetClient.getKryo();
+        kryo.register(Jogador.class);
+        kryo.register(Arma.class);
+        kryo.register(Rectangle.class);
+        kryo.register(TipoArma.class);
         
+
     }
     
     public void conectaServidor(Jogador jogador) throws IOException{
         
-        System.out.println("Conectando...");
-        kryonetClient.start();
-        kryonetClient.connect(TIMEOUT, endereco, TCP, UDP);
-        System.out.println("Registrando...");
-        Kryo kryo = kryonetClient.getKryo();
-        kryo.register(Jogador.class);
-        System.err.println("REgistrado... Enviando - cliente");
+       
+        //kryonetClient.start();
+        
+       
+       
+        System.err.println("Enviando - cliente");
         kryonetClient.sendTCP(jogador);
         System.err.println("Enviado cliente");
         

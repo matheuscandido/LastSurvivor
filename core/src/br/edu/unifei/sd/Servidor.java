@@ -5,6 +5,7 @@
  */
 package br.edu.unifei.sd;
 
+import com.badlogic.gdx.math.Rectangle;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
@@ -35,7 +36,12 @@ public class Servidor {
         System.out.println("Registrando...");
         Kryo kryo = kryonetServer.getKryo();
         kryo.register(Jogador.class);
-
+        kryo.register(Arma.class);
+        kryo.register(Jogador.class);
+        kryo.register(Arma.class);
+        kryo.register(Rectangle.class);
+        kryo.register(TipoArma.class);
+        
         System.out.println("Subiu");
         
         kryonetServer.addListener(new Listener() {
