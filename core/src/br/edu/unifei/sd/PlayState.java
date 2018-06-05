@@ -10,8 +10,10 @@ import static br.edu.unifei.sd.TipoArma.PISTOLA;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -28,6 +30,10 @@ public class PlayState extends State {
     float tempo = 0;
     Random rn = new Random();
     private List<Arma> armas = new ArrayList<Arma>();
+    
+    //Coisas de desenhar na tela
+    FreeTypeFontGenerator generator;
+    BitmapFont font;
 
     Jogador jogador;
     Sprite mapSprite;
@@ -48,6 +54,12 @@ public class PlayState extends State {
         mapa = new Mapa();
         mapSprite = new Sprite(mapTexture);
         mapSprite.setPosition((-mapTexture.getWidth())/2, (-mapTexture.getHeight())/2);
+        
+        //Font
+        generator = new FreeTypeFontGenerator(Gdx.files.internal("font.ttf"));
+        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        parameter.size = 13;
+        font = generator.generateFont(parameter);
 
         System.out.println("Criou jogador");
         jogador = new Jogador(
@@ -122,6 +134,8 @@ public class PlayState extends State {
             
             //Se o jogador passa por uma arma
             if(jogador.getSprite().getBoundingRectangle().overlaps(arma.getSprite().getBoundingRectangle())){
+                
+                font.draw(sb, "GET GUN [ENTER]", jogador.getSprite().getX() + 60, jogador.getSprite().getY() + 180);
                 
                 if(Gdx.input.isKeyJustPressed(Input.Keys.ENTER)){
                     jogador.setArma(arma);
