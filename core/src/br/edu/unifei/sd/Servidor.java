@@ -84,6 +84,7 @@ public class Servidor {
                             if(player.getCliente().getMeuEndereco().getHostAddress() ==
                                     jogadorRecebido.getCliente().getMeuEndereco().getHostAddress()){ 
                                 //Achou seu proprio jogador na lista de jogadores
+                                //jogadoresServidor.remove(player.)
                             }
                         }
                         
