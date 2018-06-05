@@ -14,7 +14,8 @@ import java.net.InetAddress;
  * @author matheuscandido
  */
 public class Servidor {
-    private Server kryonetServer;
+    private Server server;
+    private PlayState playState;
     private InetAddress endereco;
     
     public void iniciaPartida(){
