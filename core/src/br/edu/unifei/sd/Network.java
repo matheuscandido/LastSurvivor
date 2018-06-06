@@ -82,15 +82,42 @@ public class Network {
         }
     }
     
+    static public class ArmaCollected{
+        public int playerId;
+        public int x;
+        public int y;
+        public ArmaCollected(){}
+        public ArmaCollected(int playerId, int x, int y){
+            this.playerId = playerId;
+            this.x = x;
+            this.y = y;
+        }
+    }
+    
     static public class PlayStateData{
-        public boolean roundOver;
+        public boolean gameOver;
         public List<ArmaData> armaDatas;
         
         public PlayStateData(){}
-        public PlayStateData(List<ArmaData> armaDatas, boolean roundOver){
+        public PlayStateData(List<ArmaData> armaDatas, boolean gameOver){
             this.armaDatas = armaDatas;
-            this.roundOver = roundOver;
+            this.gameOver = gameOver;
         }
     }
+    
+    static public class GameOver{
+        public int winnerId;
+        
+        public GameOver(){}
+        public GameOver(int winnerId){
+            this.winnerId = winnerId;
+        }
+    }
+    
+    static public class GameStart{
+        public GameStart(){}
+    }
+    
+    
     
 }

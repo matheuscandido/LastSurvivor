@@ -163,5 +163,9 @@ public class PlayState extends State {
         fuzilTexture.dispose();
 
     }
+    
+    public void onDisconnect(){
+        // todo
+    }
 
 }
