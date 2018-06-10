@@ -18,11 +18,15 @@ public class Jogador extends Movel{
     private String nickname;
     private Arma arma;
     private Cliente cliente;
+    private Movimento movendo = new Movimento();
     
     public Jogador(float largura, float altura, Texture texture, int posX, int posY) {
         super(largura, altura);
         sprite = new Sprite(texture);
         sprite.setScale(0.4f);
+        //MUITO IMPORTANTE!!!! Mandando referencia para cliente
+        cliente = new Cliente();
+        cliente.setJogador(this);
     }
     
     public void darComando(Comando comando){
@@ -37,6 +41,8 @@ public class Jogador extends Movel{
     public void andar(float r){
         addX = (float) Math.cos(Math.toRadians((double)this.sprite.getRotation()%360)) * r;
         addY = (float) Math.sin(Math.toRadians((double)this.sprite.getRotation()%360)) * r;
+        movendo.largura = this.sprite.getX() + addX;
+        movendo.altura = this.sprite.getY() + addY;
         
         System.err.println("(x: " + sprite.getX() + ", dx: " + addX + "\t" + 
                "(y: " + sprite.getY() + ", dy: " + addY + "\t" +
@@ -47,10 +53,18 @@ public class Jogador extends Movel{
     public void rotacionar(float angulo){
         float deg = (this.sprite.getRotation() + angulo)%360;
         this.sprite.setRotation(deg);
-        
+        movendo.angulo = deg;
         System.err.println("(x: " + sprite.getX() + ", dx: " + addX + ")\t" + 
                "(y: " + sprite.getY() + ", dy: " + addY + ")\t" +
                 "(deg: " +sprite.getRotation()+ ", dd: " + angulo +")");
+    }
+
+    public Movimento getMovendo() {
+        return movendo;
+    }
+
+    public void setMovendo(Movimento movendo) {
+        this.movendo = movendo;
     }
 
     public String getNickname() {
@@ -65,9 +79,19 @@ public class Jogador extends Movel{
         return arma;
     }
 
+    
+
     public void setArma(Arma arma) {
         this.arma = arma;
     }
+
+    public Cliente getCliente() {
+        return cliente;
+    }
+
+//    public void setCliente(Cliente cliente) {
+//        this.cliente = cliente;
+//    }
     
     
     

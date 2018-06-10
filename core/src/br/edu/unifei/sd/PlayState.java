@@ -10,10 +10,9 @@ import static br.edu.unifei.sd.TipoArma.PISTOLA;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.esotericsoftware.kryonet.Client;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -29,13 +28,10 @@ public class PlayState extends State {
     private Mapa mapa;
     float tempo = 0;
     Random rn = new Random();
+    private List<ElementoGrafico> egs = new ArrayList<ElementoGrafico>();
     private List<Arma> armas = new ArrayList<Arma>();
-    
-    //Coisas de desenhar na tela
-    FreeTypeFontGenerator generator;
-    BitmapFont font;
-
-    Jogador jogador;
+    private Cliente cliente = new Cliente();
+    Jogador jogador;//jogador local
     Sprite mapSprite;
     
 
@@ -54,12 +50,6 @@ public class PlayState extends State {
         mapa = new Mapa();
         mapSprite = new Sprite(mapTexture);
         mapSprite.setPosition((-mapTexture.getWidth())/2, (-mapTexture.getHeight())/2);
-        
-        //Font
-        generator = new FreeTypeFontGenerator(Gdx.files.internal("font.ttf"));
-        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.size = 13;
-        font = generator.generateFont(parameter);
 
         System.out.println("Criou jogador");
         jogador = new Jogador(
@@ -75,23 +65,18 @@ public class PlayState extends State {
         camera.setToOrtho(false, Constantes.MAPA_WIDTH, Constantes.MAPA_HEIGHT);
         camera.position.set(jogador.sprite.getX(), jogador.sprite.getY(), 0);
         camera.update();
+        egs.add(jogador);
         
         // Adiciona novas armas ao vetor de armas
         for (int i = 0; i < Constantes.NUM_ARMAS; i++) {
             int posInicialX = rn.nextInt(Constantes.MAPA_WIDTH);
             int posInicialY = rn.nextInt(Constantes.MAPA_HEIGHT);
             if (rn.nextInt(2) == 0) {
-                armas.add(new Arma(32, 32, PISTOLA, pistolaTexture, posInicialX, posInicialY));
-               
+                egs.add(new Arma(32, 32, PISTOLA, pistolaTexture, posInicialX, posInicialY));
             } else {
-                armas.add(new Arma(64, 13, FUZIL, fuzilTexture, posInicialX, posInicialY));
+                egs.add(new Arma(64, 13, FUZIL, fuzilTexture, posInicialX, posInicialY));
             }
         }
-        
-        
-        
-        
-        
     }
 
     @Override
@@ -99,15 +84,19 @@ public class PlayState extends State {
         // Movimentação do jogador
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
             jogador.rotacionar(200 * Gdx.graphics.getDeltaTime());
+            cliente.getKryonetClient().sendUDP(jogador.getMovendo());
         }
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
             jogador.rotacionar(-200 * Gdx.graphics.getDeltaTime());
+            cliente.getKryonetClient().sendUDP(jogador.getMovendo());
         }
         if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
             jogador.andar(200 * Gdx.graphics.getDeltaTime());
+            cliente.getKryonetClient().sendUDP(jogador.getMovendo());
         }
         if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
             jogador.andar(-200 * Gdx.graphics.getDeltaTime());
+            cliente.getKryonetClient().sendUDP(jogador.getMovendo());
         }
         
         // Tiro
@@ -118,6 +107,9 @@ public class PlayState extends State {
 
     @Override
     public void update(float dt){
+        
+        //fazer update da lista de jogadores
+        
     }
     
     @Override
@@ -133,17 +125,18 @@ public class PlayState extends State {
         mapSprite.draw(sb);
         jogador.sprite.draw(sb);
         
-        Iterator<ElementoGrafico> iter = mapa.getElementosGraficos().iterator();//Aqui podemos percorrer a lista de elementos graficos
+        //Iterator<Arma> iter = armas.iterator();//Aqui podemos percorrer a lista de elementos graficos
+        Iterator<ElementoGrafico> iter = egs.iterator();
         while (iter.hasNext()) {
             // aqui ficarao os ifs pertinentes a processamento grafico e logico
             ElementoGrafico eg = iter.next();
             
             //Se o jogador passa por uma arma
+           if(eg instanceof Arma) {
             if(jogador.getSprite().getBoundingRectangle().overlaps(eg.getSprite().getBoundingRectangle())){
                 
-                font.draw(sb, "GET GUN [ENTER]", jogador.getSprite().getX() + 60, jogador.getSprite().getY() + 180);
-                if(eg instanceof Arma){
                 if(Gdx.input.isKeyJustPressed(Input.Keys.ENTER)){
+                    
                     jogador.setArma((Arma) eg);
                     //Muda a textura do jogador de acordo com a arma
                     if(jogador.getArma().getTipoArma() == null)
@@ -153,13 +146,16 @@ public class PlayState extends State {
                     if(jogador.getArma().getTipoArma() == TipoArma.FUZIL)
                         jogador.getSprite().setTexture(characterFuzilTexture);
                     iter.remove();
+                    
                 }
-                
             } else {
                 eg.getSprite().draw(sb);
-            }
-          }
+              }
         }
+        }
+        
+        
+        //Implementar iterator de jogadores
         sb.end();
     }
 
