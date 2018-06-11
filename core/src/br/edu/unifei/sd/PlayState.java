@@ -28,45 +28,48 @@ public class PlayState extends State {
     private Mapa mapa;
     float tempo = 0;
     Random rn = new Random();
+    private List<Jogador> jogadores;
     private List<ElementoGrafico> egs = new ArrayList<ElementoGrafico>();
     private List<Arma> armas = new ArrayList<Arma>();
-    private Cliente cliente = new Cliente();
+    private Cliente cliente;
     Jogador jogador;//jogador local
     Sprite mapSprite;
-    
 
     public PlayState(GameStateManager gsm) {
         super(gsm);
-        
+
+        jogadores = new ArrayList<Jogador>();
+
+        cliente = new Cliente(this);
         // Inicializando as coisas
         characterTexture = new Texture(Gdx.files.internal("survivor-knife.png"));
         characterPistolaTexture = new Texture(Gdx.files.internal("survivor-pistol.png"));
         characterFuzilTexture = new Texture(Gdx.files.internal("survivor-rifle.png"));
-        
+
         pistolaTexture = new Texture(Gdx.files.internal("pistol.png"));
         fuzilTexture = new Texture(Gdx.files.internal("SVT-40.png"));
         mapTexture = new Texture(Gdx.files.internal("map.jpg"));
-        
+
         mapa = new Mapa();
         mapSprite = new Sprite(mapTexture);
-        mapSprite.setPosition((-mapTexture.getWidth())/2, (-mapTexture.getHeight())/2);
+        mapSprite.setPosition((-mapTexture.getWidth()) / 2, (-mapTexture.getHeight()) / 2);
 
         System.out.println("Criou jogador");
         jogador = new Jogador(
-                rn.nextInt(Constantes.MAPA_WIDTH), 
+                rn.nextInt(Constantes.MAPA_WIDTH),
                 rn.nextInt(Constantes.MAPA_HEIGHT),
                 characterTexture,
                 200,
                 200
         );
         System.out.println("Jogador ang" + jogador.sprite.getRotation());
-        
+
         // Configura a camera para ?
         camera.setToOrtho(false, Constantes.MAPA_WIDTH, Constantes.MAPA_HEIGHT);
         camera.position.set(jogador.sprite.getX(), jogador.sprite.getY(), 0);
         camera.update();
         egs.add(jogador);
-        
+
         // Adiciona novas armas ao vetor de armas
         for (int i = 0; i < Constantes.NUM_ARMAS; i++) {
             int posInicialX = rn.nextInt(Constantes.MAPA_WIDTH);
@@ -79,82 +82,89 @@ public class PlayState extends State {
         }
     }
 
+    public List<Jogador> getJogadores() {
+        return jogadores;
+    }
+
     @Override
     public void handleInput() {
         // Movimentação do jogador
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-            jogador.rotacionar(200 * Gdx.graphics.getDeltaTime());
-            cliente.getKryonetClient().sendUDP(jogador.getMovendo());
+
+            cliente.getKryonetClient().sendUDP(jogador.rotacionar(200 * Gdx.graphics.getDeltaTime()));
+
         }
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            jogador.rotacionar(-200 * Gdx.graphics.getDeltaTime());
-            cliente.getKryonetClient().sendUDP(jogador.getMovendo());
+            cliente.getKryonetClient().sendUDP(jogador.rotacionar(-200 * Gdx.graphics.getDeltaTime()));
+
         }
         if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
-            jogador.andar(200 * Gdx.graphics.getDeltaTime());
-            cliente.getKryonetClient().sendUDP(jogador.getMovendo());
+
+            cliente.getKryonetClient().sendUDP(jogador.andar(200 * Gdx.graphics.getDeltaTime()));
+
         }
         if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-            jogador.andar(-200 * Gdx.graphics.getDeltaTime());
-            cliente.getKryonetClient().sendUDP(jogador.getMovendo());
+            cliente.getKryonetClient().sendUDP(jogador.andar(-200 * Gdx.graphics.getDeltaTime()));
+
         }
-        
+
         // Tiro
-        if(Gdx.input.isKeyPressed(Input.Keys.SPACE)){
+        if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
             // fazer algo
         }
     }
 
     @Override
-    public void update(float dt){
-        
+    public void update(float dt) {
+
         //fazer update da lista de jogadores
-        
     }
-    
+
     @Override
     public void render(SpriteBatch sb) {
         handleInput();
-        
+
         camera.position.set(jogador.sprite.getX(), jogador.sprite.getY(), 0);
         camera.update();
-        
+
         sb.setProjectionMatrix(camera.combined);
         sb.begin();
-        
+
         mapSprite.draw(sb);
         jogador.sprite.draw(sb);
-        
+
         //Iterator<Arma> iter = armas.iterator();//Aqui podemos percorrer a lista de elementos graficos
         Iterator<ElementoGrafico> iter = egs.iterator();
         while (iter.hasNext()) {
             // aqui ficarao os ifs pertinentes a processamento grafico e logico
             ElementoGrafico eg = iter.next();
-            
+
             //Se o jogador passa por uma arma
-           if(eg instanceof Arma) {
-            if(jogador.getSprite().getBoundingRectangle().overlaps(eg.getSprite().getBoundingRectangle())){
-                
-                if(Gdx.input.isKeyJustPressed(Input.Keys.ENTER)){
-                    
-                    jogador.setArma((Arma) eg);
-                    //Muda a textura do jogador de acordo com a arma
-                    if(jogador.getArma().getTipoArma() == null)
-                        jogador.getSprite().setTexture(characterTexture);
-                    if(jogador.getArma().getTipoArma() == TipoArma.PISTOLA)
-                        jogador.getSprite().setTexture(characterPistolaTexture);
-                    if(jogador.getArma().getTipoArma() == TipoArma.FUZIL)
-                        jogador.getSprite().setTexture(characterFuzilTexture);
-                    iter.remove();
-                    
+            if (eg instanceof Arma) {
+                if (jogador.getSprite().getBoundingRectangle().overlaps(eg.getSprite().getBoundingRectangle())) {
+
+                    if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
+
+                        jogador.setArma((Arma) eg);
+                        //Muda a textura do jogador de acordo com a arma
+                        if (jogador.getArma().getTipoArma() == null) {
+                            jogador.getSprite().setTexture(characterTexture);
+                        }
+                        if (jogador.getArma().getTipoArma() == TipoArma.PISTOLA) {
+                            jogador.getSprite().setTexture(characterPistolaTexture);
+                        }
+                        if (jogador.getArma().getTipoArma() == TipoArma.FUZIL) {
+                            jogador.getSprite().setTexture(characterFuzilTexture);
+                        }
+                        iter.remove();
+
+                    }
+                } else {
+                    eg.getSprite().draw(sb);
                 }
-            } else {
-                eg.getSprite().draw(sb);
-              }
+            }
         }
-        }
-        
-        
+
         //Implementar iterator de jogadores
         sb.end();
     }

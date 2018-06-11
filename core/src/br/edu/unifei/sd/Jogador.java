@@ -5,6 +5,7 @@
  */
 package br.edu.unifei.sd;
 
+import br.edu.unifei.sd.rede.JogadorMoveu;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -16,9 +17,18 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 public class Jogador extends Movel{
     
     private String nickname;
+    private int id;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
     private Arma arma;
     private Cliente cliente;
-    private Movimento movendo = new Movimento();
+   
     
     public Jogador(float largura, float altura, Texture texture, int posX, int posY) {
         super(largura, altura);
@@ -38,35 +48,21 @@ public class Jogador extends Movel{
     }
     
     float addX,addY;
-    public void andar(float r){
+    public JogadorMoveu andar(float r){
         addX = (float) Math.cos(Math.toRadians((double)this.sprite.getRotation()%360)) * r;
         addY = (float) Math.sin(Math.toRadians((double)this.sprite.getRotation()%360)) * r;
-        movendo.largura = this.sprite.getX() + addX;
-        movendo.altura = this.sprite.getY() + addY;
-        
-        System.err.println("(x: " + sprite.getX() + ", dx: " + addX + "\t" + 
-               "(y: " + sprite.getY() + ", dy: " + addY + "\t" +
-                "deg: " +sprite.getRotation()+ ", dd: 0" + ")");
         this.sprite.setPosition(this.sprite.getX() + addX, this.sprite.getY() + addY);
+        return new JogadorMoveu(id,addX,addY, this.sprite.getRotation());
     }
     
-    public void rotacionar(float angulo){
+    public JogadorMoveu rotacionar(float angulo){
         float deg = (this.sprite.getRotation() + angulo)%360;
         this.sprite.setRotation(deg);
-        movendo.angulo = deg;
-        System.err.println("(x: " + sprite.getX() + ", dx: " + addX + ")\t" + 
-               "(y: " + sprite.getY() + ", dy: " + addY + ")\t" +
-                "(deg: " +sprite.getRotation()+ ", dd: " + angulo +")");
+        return new JogadorMoveu(id, sprite.getX(), sprite.getY(), deg);
+       
     }
 
-    public Movimento getMovendo() {
-        return movendo;
-    }
-
-    public void setMovendo(Movimento movendo) {
-        this.movendo = movendo;
-    }
-
+  
     public String getNickname() {
         return nickname;
     }
