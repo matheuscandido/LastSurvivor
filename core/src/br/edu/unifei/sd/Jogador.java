@@ -6,9 +6,9 @@
 package br.edu.unifei.sd;
 
 import br.edu.unifei.sd.rede.JogadorMoveu;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import java.util.List;
 
 /**
  *
@@ -53,11 +53,29 @@ public class Jogador extends Movel{
         return new Tiro(Constantes.TIRO_LARGURA, Constantes.TIRO_ALTURA, x, y, angulo, arma);
     }
    
-    public JogadorMoveu andar(float r){
-        float addX = this.sprite.getX() + (float) Math.cos(Math.toRadians((double)this.sprite.getRotation()%360)) * r;
-        float addY = this.sprite.getY() + (float) Math.sin(Math.toRadians((double)this.sprite.getRotation()%360)) * r;
-        this.sprite.setPosition(addX, addY);
-        return new JogadorMoveu(id, addX, addY, this.sprite.getRotation());
+    public JogadorMoveu andar(List<Jogador> jogadores, float r){
+        float newX = this.sprite.getX() + (float) Math.cos(Math.toRadians((double)this.sprite.getRotation()%360)) * r;
+        float newY = this.sprite.getY() + (float) Math.sin(Math.toRadians((double)this.sprite.getRotation()%360)) * r;
+        float oldX = this.sprite.getX();
+        float oldY = this.sprite.getY();
+        
+        boolean overlaps = false;
+        
+        this.sprite.setPosition(newX, newY);
+        
+        for(Jogador outro : jogadores){
+            if(this.sprite.getBoundingRectangle().overlaps(outro.sprite.getBoundingRectangle())){
+                overlaps = true;
+            }
+        }
+        
+        if(!overlaps){
+            this.sprite.setPosition(newX, newY);
+            return new JogadorMoveu(id, newX, newY, this.sprite.getRotation());
+        } else {
+            this.sprite.setPosition(oldX, oldY);
+            return null;
+        }
     }
     
     public JogadorMoveu rotacionar(float angulo){

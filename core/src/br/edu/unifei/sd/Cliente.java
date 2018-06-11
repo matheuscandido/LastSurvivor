@@ -79,8 +79,8 @@ public class Cliente {
             this.playstate.getJogadores().add(
                     new Jogador(
                             ((JogadorMoveu) object).playerId, 
-                            200, 
-                            200, 
+                            Constantes.JOGADOR_WIDTH, 
+                            Constantes.JOGADOR_HEIGHT, 
                             this.playstate.getCharacterTexture(), 
                             ((JogadorMoveu) object).x, 
                             ((JogadorMoveu) object).y

@@ -19,5 +19,6 @@ public class Constantes {
     public static final int TCP = 6667;
     public static final int UDP = 50322;
     public static final int TIMEOUT = 50000;
-            
+    public static final int JOGADOR_WIDTH = 30;
+    public static final int JOGADOR_HEIGHT = 30;
 }

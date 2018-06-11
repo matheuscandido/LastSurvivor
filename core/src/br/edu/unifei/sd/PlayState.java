@@ -5,11 +5,14 @@
  */
 package br.edu.unifei.sd;
 
+import br.edu.unifei.sd.rede.JogadorMoveu;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,8 +34,11 @@ public class PlayState extends State {
     private List<ElementoGrafico> egs = new ArrayList<ElementoGrafico>();
     private List<Arma> armas = new ArrayList<Arma>();
     private Cliente cliente;
+    
     Jogador jogador;//jogador local
     Sprite mapSprite;
+    
+    ShapeRenderer sr;
 
     public PlayState(GameStateManager gsm) {
         super(gsm);
@@ -55,8 +61,8 @@ public class PlayState extends State {
         // Inicializando o jogador EU
         System.out.println("Criou jogador");
         jogador = new Jogador(
-                200,
-                200,
+                Constantes.JOGADOR_WIDTH,
+                Constantes.JOGADOR_HEIGHT,
                 characterTexture,
                 rn.nextInt(Constantes.MAPA_WIDTH),
                 rn.nextInt(Constantes.MAPA_HEIGHT)
@@ -75,7 +81,9 @@ public class PlayState extends State {
         camera.position.set(jogador.sprite.getX(), jogador.sprite.getY(), 0);
         camera.update();
 
-//        // Adiciona novas armas ao vetor de armas
+        sr = new ShapeRenderer();
+        
+        //        // Adiciona novas armas ao vetor de armas
 //        for (int i = 0; i < Constantes.NUM_ARMAS; i++) {
 //            int posInicialX = rn.nextInt(Constantes.MAPA_WIDTH);
 //            int posInicialY = rn.nextInt(Constantes.MAPA_HEIGHT);
@@ -101,10 +109,14 @@ public class PlayState extends State {
             cliente.getKryonetClient().sendUDP(jogador.rotacionar(-200 * Gdx.graphics.getDeltaTime()));
         }
         if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
-            cliente.getKryonetClient().sendUDP(jogador.andar(200 * Gdx.graphics.getDeltaTime()));
+            JogadorMoveu jogadorMoveu = jogador.andar(jogadores, 200 * Gdx.graphics.getDeltaTime());
+            if(jogadorMoveu != null)
+                cliente.getKryonetClient().sendUDP(jogadorMoveu);
         }
         if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-            cliente.getKryonetClient().sendUDP(jogador.andar(-200 * Gdx.graphics.getDeltaTime()));
+            JogadorMoveu jogadorMoveu = jogador.andar(jogadores, -200 * Gdx.graphics.getDeltaTime());
+            if(jogadorMoveu != null)
+                cliente.getKryonetClient().sendUDP(jogadorMoveu);
         }
         // Tiro
         if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
@@ -168,6 +180,16 @@ public class PlayState extends State {
 
         //Implementar iterator de jogadores
         sb.end();
+        
+        sr.setProjectionMatrix(camera.combined);
+        sr.begin(ShapeRenderer.ShapeType.Line);
+        sr.setColor(new Color(0,0,1,0));
+        for(Jogador jogador : jogadores){
+            sr.rect(jogador.sprite.getX(), jogador.sprite.getY(), jogador.sprite.getWidth(), jogador.sprite.getHeight());
+        }
+        sr.rect(jogador.sprite.getX(), jogador.sprite.getY(), jogador.sprite.getWidth(), jogador.sprite.getHeight());
+        sr.end();
+        
     }
 
     @Override
