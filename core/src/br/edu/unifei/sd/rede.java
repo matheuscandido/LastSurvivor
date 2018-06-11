@@ -5,13 +5,19 @@
  */
 package br.edu.unifei.sd;
 
+import br.edu.unifei.sd.rede.JogadorMoveu;
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryonet.EndPoint;
+
 /**
  *
  * @author user
  */
 public class rede {
 
-    public rede() {
+    static public void register(EndPoint endPoint){
+        Kryo kryo = endPoint.getKryo();
+        kryo.register(JogadorMoveu.class);
     }
 
     static public class JogadorMoveu {

@@ -9,12 +9,10 @@ import br.edu.unifei.sd.rede.JogadorMoveu;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Connection;
 import java.net.InetAddress;
-import java.util.ArrayList;
 
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Listener;
 import java.io.IOException;
-import java.util.LinkedList;
 
 /**
  *
@@ -24,30 +22,35 @@ public class Cliente {
     
     private Jogador jogador;
     private InetAddress enderecoServidor, meuEndereco;
-    private Client kryonetClient = new Client();
-    private static final int TCP = 6660, UDP = 6661, TIMEOUT = 500000;
+    private Client kryonetClient; 
     private PlayState playstate;
-    
-    public Cliente() {
-        
-    }
     
     public Cliente(PlayState playstate) {
         this.playstate = playstate;
-    }
-    
-    public ArrayList<Servidor> descobreServidor() {
-        System.out.println("Procurando Server...");
-        enderecoServidor = kryonetClient.discoverHost(UDP, TIMEOUT);
-        System.out.println("Servidor encontrado em: " + enderecoServidor.getHostAddress());
-        return null;
+        
+        kryonetClient = new Client();
+        
+        kryonetClient.addListener(new Listener() {
+            
+            @Override
+            public void received(Connection connection, Object object) {
+                if (object instanceof JogadorMoveu) {
+                    handleReceived(connection, object);
+                }
+            }
+        });
+        
+        // Registrando classes do Kryonet com método estático acessório
+        rede.register(kryonetClient);
+        
+        enderecoServidor = kryonetClient.discoverHost(Constantes.UDP, Constantes.TIMEOUT);
     }
     
     public void conectaServidor() throws IOException {
         
         System.out.println("Conectando...");
         kryonetClient.start();
-        kryonetClient.connect(TIMEOUT, enderecoServidor, TCP, UDP);
+        kryonetClient.connect(Constantes.TIMEOUT, enderecoServidor, Constantes.TCP, Constantes.UDP);
         System.out.println("Registrando...");
         Kryo kryo = kryonetClient.getKryo();
         //  kryo.register(Jogador.class);
@@ -55,36 +58,38 @@ public class Cliente {
         // kryonetClient.sendTCP(jogador);
         System.err.println("Enviado cliente");
         meuEndereco = InetAddress.getLocalHost();
-        
+    }
+    
+    protected void handleReceived(Connection connection, Object object){
+        boolean temJogador = false;
+                    
+        for (Jogador player : playstate.getJogadores()) {
+            if (player.getId() == ((JogadorMoveu) object).playerId) {
+                player.getSprite().setX(((JogadorMoveu) object).x);
+                player.getSprite().setY(((JogadorMoveu) object).y);
+                player.getSprite().setRotation(((JogadorMoveu) object).angulo);
+                System.out.println("RECEBI ALGO DO SERVIDOR");
+                temJogador = true;
+                break;
+            }   
+        }
+
+        if(!temJogador){
+            this.playstate.getJogadores().add(
+                    new Jogador(
+                            ((JogadorMoveu) object).playerId, 
+                            200, 
+                            200, 
+                            this.playstate.getCharacterTexture(), 
+                            ((JogadorMoveu) object).x, 
+                            ((JogadorMoveu) object).y
+                    )
+            );
+        }
     }
     
     public Client getKryonetClient() {
         return kryonetClient;
-    }
-    
-    public void listener(Connection connection, Object object) {
-        // Implementar recebimento de objetos do servidor
-        System.out.println("Entrando no listener");
-        kryonetClient.addListener(new Listener() {
-            @Override
-            public void received(Connection connection, Object object) {
-                if (object instanceof JogadorMoveu) {
-                    
-                    for (Jogador player : playstate.getJogadores()) {
-                        if (player.getId() == ((JogadorMoveu) object).playerId) {
-                            
-                            player.getSprite().setX(((JogadorMoveu) object).x);
-                            player.getSprite().setY(((JogadorMoveu) object).y);
-                            player.getSprite().setRotation(((JogadorMoveu) object).angulo);
-                            break;
-                        }
-                        
-                        
-                    }
-                }
-            }
-        });
-        
     }
     
     public Jogador getJogador() {
@@ -93,10 +98,6 @@ public class Cliente {
     
     public void setJogador(Jogador jogador) {
         this.jogador = jogador;
-    }
-    
-    public void refresh() {
-        
     }
     
     public InetAddress getEnderecoServidor() {

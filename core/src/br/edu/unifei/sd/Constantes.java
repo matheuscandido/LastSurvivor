@@ -16,4 +16,8 @@ public class Constantes {
     public static final int MAPA_WIDTH = 1200;
     public static final int MAPA_HEIGHT = 700;
     public static final String TITLE = "Gamedev Unknown's Last Survivor";
+    public static final int TCP = 6668;
+    public static final int UDP = 50323;
+    public static final int TIMEOUT = 50000;
+            
 }

@@ -27,16 +27,22 @@ public class Jogador extends Movel{
         this.id = id;
     }
     private Arma arma;
-    private Cliente cliente;
-   
     
-    public Jogador(float largura, float altura, Texture texture, int posX, int posY) {
+    public Jogador(int largura, int altura, Texture texture, float posX, float posY) {
         super(largura, altura);
         sprite = new Sprite(texture);
         sprite.setScale(0.4f);
-        //MUITO IMPORTANTE!!!! Mandando referencia para cliente
-        cliente = new Cliente();
-        cliente.setJogador(this);
+        sprite.setPosition(posX, posY);
+    }
+    
+    public Jogador(int id, int largura, int altura, Texture texture, float posX, float posY) {
+        super(largura, altura);
+        
+        this.id = id;
+        
+        sprite = new Sprite(texture);
+        sprite.setScale(0.4f);
+        sprite.setPosition(posX, posY);
     }
     
     public void darComando(Comando comando){
@@ -46,13 +52,12 @@ public class Jogador extends Movel{
     public Tiro atirar(){
         return new Tiro(Constantes.TIRO_LARGURA, Constantes.TIRO_ALTURA, x, y, angulo, arma);
     }
-    
-    float addX,addY;
+   
     public JogadorMoveu andar(float r){
-        addX = (float) Math.cos(Math.toRadians((double)this.sprite.getRotation()%360)) * r;
-        addY = (float) Math.sin(Math.toRadians((double)this.sprite.getRotation()%360)) * r;
-        this.sprite.setPosition(this.sprite.getX() + addX, this.sprite.getY() + addY);
-        return new JogadorMoveu(id,addX,addY, this.sprite.getRotation());
+        float addX = this.sprite.getX() + (float) Math.cos(Math.toRadians((double)this.sprite.getRotation()%360)) * r;
+        float addY = this.sprite.getY() + (float) Math.sin(Math.toRadians((double)this.sprite.getRotation()%360)) * r;
+        this.sprite.setPosition(addX, addY);
+        return new JogadorMoveu(id, addX, addY, this.sprite.getRotation());
     }
     
     public JogadorMoveu rotacionar(float angulo){
@@ -79,10 +84,6 @@ public class Jogador extends Movel{
 
     public void setArma(Arma arma) {
         this.arma = arma;
-    }
-
-    public Cliente getCliente() {
-        return cliente;
     }
 
 //    public void setCliente(Cliente cliente) {

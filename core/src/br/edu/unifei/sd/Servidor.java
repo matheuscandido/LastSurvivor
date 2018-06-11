@@ -21,25 +21,27 @@ public class Servidor {
 
     private Server kryonetServer;
     private InetAddress endereco;
-    private static final int TCP = 6660, UDP = 6661, TIMEOUT = 500000;
 
     public Servidor() throws IOException {
 
         kryonetServer = new Server();
+        
+        // Registrando classes do Kryonet com método estático acessório
+        rede.register(kryonetServer);
+        
         kryonetServer.addListener(new Listener() {
 
             @Override
             public void received(Connection connection, Object object) {
                 if (object instanceof rede.JogadorMoveu) {
-
+                    System.out.println("MANDEI ALGO DOO CLIENTE " + connection.getID());
                     kryonetServer.sendToAllExceptUDP(connection.getID(), object);
-
                 }
             }
 
         });
-
-        kryonetServer.bind(TCP, UDP);
+        
+        kryonetServer.bind(Constantes.TCP, Constantes.UDP);
         kryonetServer.start();
 
     }
