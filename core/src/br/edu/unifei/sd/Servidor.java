@@ -5,6 +5,7 @@
  */
 package br.edu.unifei.sd;
 
+import br.edu.unifei.sd.rede.JogadorMoveu;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
@@ -34,6 +35,8 @@ public class Servidor {
             @Override
             public void received(Connection connection, Object object) {
                 if (object instanceof rede.JogadorMoveu) {
+                    JogadorMoveu mensagem = (rede.JogadorMoveu) object;
+                    mensagem.playerId = connection.getID();
                     System.out.println("MANDEI ALGO DOO CLIENTE " + connection.getID());
                     kryonetServer.sendToAllExceptUDP(connection.getID(), object);
                 }

@@ -68,13 +68,14 @@ public class Cliente {
                 player.getSprite().setX(((JogadorMoveu) object).x);
                 player.getSprite().setY(((JogadorMoveu) object).y);
                 player.getSprite().setRotation(((JogadorMoveu) object).angulo);
-                System.out.println("RECEBI ALGO DO SERVIDOR");
+                System.out.println("RECEBI ALGO DO SERVIDOR: ID " + ((JogadorMoveu) object).playerId);
                 temJogador = true;
                 break;
             }   
         }
 
         if(!temJogador){
+            System.out.println("JOGADOR ADICIONADO AO VETOR DE JGOADORES");
             this.playstate.getJogadores().add(
                     new Jogador(
                             ((JogadorMoveu) object).playerId, 

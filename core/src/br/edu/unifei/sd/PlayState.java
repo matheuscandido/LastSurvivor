@@ -5,17 +5,13 @@
  */
 package br.edu.unifei.sd;
 
-import static br.edu.unifei.sd.TipoArma.FUZIL;
-import static br.edu.unifei.sd.TipoArma.PISTOLA;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.esotericsoftware.kryonet.Client;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 import java.util.logging.Level;
@@ -118,13 +114,11 @@ public class PlayState extends State {
 
     @Override
     public void update(float dt) {
-
-        //fazer update da lista de jogadores
+        handleInput();
     }
 
     @Override
     public void render(SpriteBatch sb) {
-        handleInput();
 
         camera.position.set(jogador.sprite.getX(), jogador.sprite.getY(), 0);
         camera.update();
