@@ -21,6 +21,7 @@ public abstract class ElementoGrafico {
     public ElementoGrafico(float largura, float altura){
         this.altura = altura;
         this.largura = largura;
+        this.sprite = new Sprite();
     }
 
     public float getAltura() {

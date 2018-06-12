@@ -91,14 +91,17 @@ public class Cliente {
         }
     }
     
+    // Quando recebo um evento JogadorAtirou, adiciono um tiro na lista de tiros do PlayState
     protected void handleJogadorAtirou(Connection connection, Object object){
         
         boolean isFuzil = ((JogadorAtirou)object).isFuzil;
         float x = ((JogadorAtirou)object).x;
         float y = ((JogadorAtirou)object).y;
         float angulo = ((JogadorAtirou)object).angulo;
-        
-        playstate.getTiros().add(new Tiro(x, y, angulo, TipoArma.FUZIL));
+        if(isFuzil)
+            playstate.getTirosDosOutros().add(new Tiro(x, y, angulo, TipoArma.FUZIL));
+        else
+            playstate.getTirosDosOutros().add(new Tiro(x, y, angulo, TipoArma.PISTOLA));
     }
     
     public Client getKryonetClient() {

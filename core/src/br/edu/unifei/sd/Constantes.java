@@ -25,4 +25,6 @@ public class Constantes {
     public static final int ALCANCE_PISTOLA = 200;
     
     public static final float FIRE_RATE_FUZIL = 0.5f;
+    
+    public static final int VELOCIDADE_TIRO = 600;
 }

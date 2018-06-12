@@ -15,6 +15,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 import java.util.logging.Level;
@@ -37,6 +38,13 @@ public class PlayState extends State {
     private List<Tiro> meusTiros = new ArrayList<Tiro>();
     private Cliente cliente;
     
+    /*
+    Para que eu não tenha que carregar uma ID no JogadorAtirou, vou criar duas listas de tiros.
+    A primeira é os tiros recebidos da rede, de outros players, que eu vou só mover pra frente e desenhar na tela andando.
+    A segunda são os meus tiros, que vou além de mover e desenhar, verificar por intersects com outros players e caso afirmativo
+    disparar um evento de JogadorMorreu para o servidor.
+    */
+    
     Jogador jogador;//jogador local
     Sprite mapSprite;
     
@@ -56,6 +64,7 @@ public class PlayState extends State {
         pistolaTexture = new Texture(Gdx.files.internal("pistol.png"));
         fuzilTexture = new Texture(Gdx.files.internal("SVT-40.png"));
         mapTexture = new Texture(Gdx.files.internal("map.jpg"));
+        
         
         mapSprite = new Sprite(mapTexture);
         mapSprite.setPosition((-mapTexture.getWidth()) / 2, (-mapTexture.getHeight()) / 2);
@@ -112,14 +121,17 @@ public class PlayState extends State {
         }
         // Tiro
         if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE)){
-            if(jogador.getArma() != null)
+            if(jogador.getArma() != null){
                 cliente.getKryonetClient().sendUDP(jogador.atirar());
+                meusTiros.add(new Tiro(jogador.getSprite().getX(), jogador.getSprite().getY(), jogador.getSprite().getRotation(), jogador.getArma().getTipoArma()));
+            }
         }
     }
 
     @Override
     public void update(float dt) {
         handleInput();
+        calcularTiros(dt);
     }
 
     @Override
@@ -137,6 +149,13 @@ public class PlayState extends State {
         
         for(Jogador jogador : jogadores){
             jogador.sprite.draw(sb);
+        }
+        
+        for(Tiro tiro : tirosDosOutros){
+            tiro.sprite.draw(sb);
+        }
+        for(Tiro tiro : meusTiros){
+            tiro.sprite.draw(sb);
         }
 
 //        //Iterator<Arma> iter = armas.iterator();//Aqui podemos percorrer a lista de elementos graficos
@@ -216,8 +235,29 @@ public class PlayState extends State {
         return armas;
     }
 
-    public List<Tiro> getTiros() {
-        return tiros;
+    public List<Tiro> getTirosDosOutros() {
+        return tirosDosOutros;
     }
 
+    public List<Tiro> getMeusTiros() {
+        return meusTiros;
+    }
+
+    private void calcularTiros(float dt) {
+        // Calculando tiros dos outros
+        Iterator<Tiro> iter = tirosDosOutros.iterator();
+        while(iter.hasNext()){
+            if(!iter.next().mover(dt, Constantes.VELOCIDADE_TIRO)){
+                iter.remove();
+            }
+        }
+        
+        // Calculando meus tiros
+        iter = meusTiros.iterator();
+        while(iter.hasNext()){
+            if(!iter.next().mover(dt, Constantes.VELOCIDADE_TIRO)){
+                iter.remove();
+            }
+        }
+    }
 }

@@ -48,8 +48,9 @@ public class Servidor {
                     System.out.println("MANDEI ALGO DOO CLIENTE " + connection.getID());
                     kryonetServer.sendToAllExceptUDP(connection.getID(), object);
                 } else if(object instanceof rede.JogadorAtirou){
+                    System.out.println("Jogador " + connection.getID() + " atirou. Retransmitindo...");
                     JogadorAtirou mensagem = (rede.JogadorAtirou) object;
-                    kryonetServer.sendToAllUDP(mensagem);
+                    kryonetServer.sendToAllExceptUDP(connection.getID(),mensagem);
                 }
             }
 
