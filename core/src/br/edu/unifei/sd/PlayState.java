@@ -33,6 +33,8 @@ public class PlayState extends State {
     private List<Jogador> jogadores;
     private List<ElementoGrafico> egs = new ArrayList<ElementoGrafico>();
     private List<Arma> armas = new ArrayList<Arma>();
+    private List<Tiro> tirosDosOutros = new ArrayList<Tiro>();
+    private List<Tiro> meusTiros = new ArrayList<Tiro>();
     private Cliente cliente;
     
     Jogador jogador;//jogador local
@@ -83,16 +85,6 @@ public class PlayState extends State {
 
         sr = new ShapeRenderer();
         
-        //        // Adiciona novas armas ao vetor de armas
-//        for (int i = 0; i < Constantes.NUM_ARMAS; i++) {
-//            int posInicialX = rn.nextInt(Constantes.MAPA_WIDTH);
-//            int posInicialY = rn.nextInt(Constantes.MAPA_HEIGHT);
-//            if (rn.nextInt(2) == 0) {
-//                egs.add(new Arma(32, 32, PISTOLA, pistolaTexture, posInicialX, posInicialY));
-//            } else {
-//                egs.add(new Arma(64, 13, FUZIL, fuzilTexture, posInicialX, posInicialY));
-//            }
-//        }
     }
 
     public List<Jogador> getJogadores() {
@@ -119,8 +111,9 @@ public class PlayState extends State {
                 cliente.getKryonetClient().sendUDP(jogadorMoveu);
         }
         // Tiro
-        if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
-            // fazer algo
+        if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE)){
+            if(jogador.getArma() != null)
+                cliente.getKryonetClient().sendUDP(jogador.atirar());
         }
     }
 
@@ -186,8 +179,10 @@ public class PlayState extends State {
         sr.setColor(new Color(0,0,1,0));
         for(Jogador jogador : jogadores){
             sr.rect(jogador.sprite.getX(), jogador.sprite.getY(), jogador.sprite.getWidth(), jogador.sprite.getHeight());
+            sr.circle(jogador.sprite.getX(), jogador.sprite.getY(), 5);
         }
         sr.rect(jogador.sprite.getX(), jogador.sprite.getY(), jogador.sprite.getWidth(), jogador.sprite.getHeight());
+        sr.circle(jogador.sprite.getX(), jogador.sprite.getY(), 5);
         sr.end();
         
     }
@@ -220,7 +215,9 @@ public class PlayState extends State {
     public List<Arma> getArmas() {
         return armas;
     }
-    
-    
+
+    public List<Tiro> getTiros() {
+        return tiros;
+    }
 
 }

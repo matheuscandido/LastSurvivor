@@ -14,14 +14,16 @@ public class Tiro extends Movel{
     private float x;
     private float y;
     private float angulo;
-    private Arma arma;
+    private float distanciaPercorrida;
+    private TipoArma tipo;
     
-    public Tiro(float largura, float altura, float x, float y, float angulo, Arma arma) {
-        super(largura, altura);
+    public Tiro(float x, float y, float angulo, TipoArma tipo) {
+        super(17, 11);
         this.x = x;
         this.y = y;
         this.angulo = angulo;
-        this.arma = arma;
+        this.tipo = tipo;
+        this.distanciaPercorrida = 0;
     }
 
     public float getX() {

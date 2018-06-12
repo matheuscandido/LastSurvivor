@@ -5,6 +5,7 @@
  */
 package br.edu.unifei.sd;
 
+import br.edu.unifei.sd.rede.JogadorAtirou;
 import br.edu.unifei.sd.rede.JogadorMoveu;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Connection;
@@ -35,7 +36,9 @@ public class Cliente {
             @Override
             public void received(Connection connection, Object object) {
                 if (object instanceof JogadorMoveu) {
-                    handleReceived(connection, object);
+                    handleJogadorMoveu(connection, object);
+                } else if(object instanceof JogadorAtirou){
+                    handleJogadorAtirou(connection, object);
                 }
             }
         });
@@ -47,7 +50,6 @@ public class Cliente {
     }
     
     public void conectaServidor() throws IOException {
-        
         System.out.println("Conectando...");
         kryonetClient.start();
         kryonetClient.connect(Constantes.TIMEOUT, enderecoServidor, Constantes.TCP, Constantes.UDP);
@@ -60,7 +62,7 @@ public class Cliente {
         meuEndereco = InetAddress.getLocalHost();
     }
     
-    protected void handleReceived(Connection connection, Object object){
+    protected void handleJogadorMoveu(Connection connection, Object object){
         boolean temJogador = false;
                     
         for (Jogador player : playstate.getJogadores()) {
@@ -87,6 +89,16 @@ public class Cliente {
                     )
             );
         }
+    }
+    
+    protected void handleJogadorAtirou(Connection connection, Object object){
+        
+        boolean isFuzil = ((JogadorAtirou)object).isFuzil;
+        float x = ((JogadorAtirou)object).x;
+        float y = ((JogadorAtirou)object).y;
+        float angulo = ((JogadorAtirou)object).angulo;
+        
+        playstate.getTiros().add(new Tiro(x, y, angulo, TipoArma.FUZIL));
     }
     
     public Client getKryonetClient() {

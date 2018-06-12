@@ -5,6 +5,7 @@
  */
 package br.edu.unifei.sd;
 
+import br.edu.unifei.sd.rede.JogadorAtirou;
 import br.edu.unifei.sd.rede.JogadorMoveu;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
@@ -22,6 +23,8 @@ public class Servidor {
 
     private Server kryonetServer;
     private InetAddress endereco;
+    
+    
 
     public Servidor() throws IOException {
 
@@ -31,6 +34,11 @@ public class Servidor {
         rede.register(kryonetServer);
         
         kryonetServer.addListener(new Listener() {
+            
+            @Override
+            public void connected(Connection connection){
+                
+            }
 
             @Override
             public void received(Connection connection, Object object) {
@@ -39,6 +47,9 @@ public class Servidor {
                     mensagem.playerId = connection.getID();
                     System.out.println("MANDEI ALGO DOO CLIENTE " + connection.getID());
                     kryonetServer.sendToAllExceptUDP(connection.getID(), object);
+                } else if(object instanceof rede.JogadorAtirou){
+                    JogadorAtirou mensagem = (rede.JogadorAtirou) object;
+                    kryonetServer.sendToAllUDP(mensagem);
                 }
             }
 

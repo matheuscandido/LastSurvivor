@@ -5,6 +5,7 @@
  */
 package br.edu.unifei.sd;
 
+import br.edu.unifei.sd.rede.JogadorAtirou;
 import br.edu.unifei.sd.rede.JogadorMoveu;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -16,6 +17,7 @@ import java.util.List;
  */
 public class Jogador extends Movel{
     
+    private Arma arma;
     private String nickname;
     private int id;
 
@@ -26,12 +28,13 @@ public class Jogador extends Movel{
     public void setId(int id) {
         this.id = id;
     }
-    private Arma arma;
+    
     
     public Jogador(int largura, int altura, Texture texture, float posX, float posY) {
         super(largura, altura);
         sprite = new Sprite(texture);
-        sprite.setScale(0.4f);
+        sprite.setSize(largura, altura);
+        sprite.setOriginCenter();
         sprite.setPosition(posX, posY);
     }
     
@@ -41,16 +44,18 @@ public class Jogador extends Movel{
         this.id = id;
         
         sprite = new Sprite(texture);
-        sprite.setScale(0.4f);
+        sprite.setSize(largura, altura);
+        sprite.setOriginCenter();
         sprite.setPosition(posX, posY);
     }
     
-    public void darComando(Comando comando){
-        
-    }
-    
-    public Tiro atirar(){
-        return new Tiro(Constantes.TIRO_LARGURA, Constantes.TIRO_ALTURA, x, y, angulo, arma);
+    public JogadorAtirou atirar(){
+        boolean isFuzil = false;
+        if(this.getArma().getTipoArma() == TipoArma.FUZIL)
+            isFuzil = true;
+        if(this.getArma().getTipoArma() == TipoArma.PISTOLA)
+            isFuzil = false;
+        return new JogadorAtirou(this.sprite.getX(), this.sprite.getY(), this.sprite.getRotation(), isFuzil);
     }
    
     public JogadorMoveu andar(List<Jogador> jogadores, float r){
