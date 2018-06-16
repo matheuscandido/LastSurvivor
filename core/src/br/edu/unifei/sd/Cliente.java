@@ -26,6 +26,7 @@ public class Cliente {
     private Client kryonetClient; 
     private PlayState playstate;
     
+    
     public Cliente(PlayState playstate) {
         this.playstate = playstate;
         
@@ -62,7 +63,7 @@ public class Cliente {
         meuEndereco = InetAddress.getLocalHost();
     }
     
-    protected void handleJogadorMoveu(Connection connection, Object object){
+    protected synchronized void handleJogadorMoveu(Connection connection, Object object){
         boolean temJogador = false;
                     
         for (Jogador player : playstate.getJogadores()) {
@@ -92,16 +93,19 @@ public class Cliente {
     }
     
     // Quando recebo um evento JogadorAtirou, adiciono um tiro na lista de tiros do PlayState
-    protected void handleJogadorAtirou(Connection connection, Object object){
+    protected synchronized void handleJogadorAtirou(Connection connection, Object object){
+        
         
         boolean isFuzil = ((JogadorAtirou)object).isFuzil;
         float x = ((JogadorAtirou)object).x;
         float y = ((JogadorAtirou)object).y;
         float angulo = ((JogadorAtirou)object).angulo;
+        System.out.println("RECEBENDO TIROS");
+        
         if(isFuzil)
-            playstate.getTirosDosOutros().add(new Tiro(x, y, angulo, TipoArma.FUZIL));
+             playstate.getTirosDosOutros().add(new Tiro(x, y, angulo, TipoArma.FUZIL,playstate.getTiroTexture()));
         else
-            playstate.getTirosDosOutros().add(new Tiro(x, y, angulo, TipoArma.PISTOLA));
+             playstate.getTirosDosOutros().add(new Tiro(x, y, angulo, TipoArma.PISTOLA,playstate.getTiroTexture()));
     }
     
     public Client getKryonetClient() {

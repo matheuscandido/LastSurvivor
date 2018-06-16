@@ -20,14 +20,14 @@ public class Tiro extends Movel{
     private float distanciaPercorrida;
     private TipoArma tipo;
     
-    public Tiro(float x, float y, float angulo, TipoArma tipo) {
+    public Tiro(float x, float y, float angulo, TipoArma tipo,Texture textura) {
         super(17, 11);
         this.x = x;
         this.y = y;
         this.angulo = angulo;
         this.tipo = tipo;
         this.distanciaPercorrida = 0;
-        this.sprite.setTexture(new Texture(Gdx.files.internal("shot.png")));
+        this.sprite.setTexture(textura);
     }
 
     public float getX() {

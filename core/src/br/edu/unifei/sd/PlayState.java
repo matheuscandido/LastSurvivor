@@ -27,7 +27,7 @@ import java.util.logging.Logger;
  */
 public class PlayState extends State {
 
-    private Texture characterTexture, characterPistolaTexture, characterFuzilTexture, pistolaTexture, fuzilTexture, mapTexture;
+    private Texture characterTexture, characterPistolaTexture, characterFuzilTexture, pistolaTexture, fuzilTexture, mapTexture,tiroTexture;
     
     float tempo = 0;
     Random rn = new Random();
@@ -64,7 +64,7 @@ public class PlayState extends State {
         pistolaTexture = new Texture(Gdx.files.internal("pistol.png"));
         fuzilTexture = new Texture(Gdx.files.internal("SVT-40.png"));
         mapTexture = new Texture(Gdx.files.internal("map.jpg"));
-        
+        tiroTexture = new Texture(Gdx.files.internal("shot.png"));
         
         mapSprite = new Sprite(mapTexture);
         mapSprite.setPosition((-mapTexture.getWidth()) / 2, (-mapTexture.getHeight()) / 2);
@@ -79,7 +79,8 @@ public class PlayState extends State {
                 rn.nextInt(Constantes.MAPA_HEIGHT)
         );
         jogador.setId(cliente.getKryonetClient().getID());
-        
+        Arma arma = new Arma(Constantes.PISTOLA_WIDTH, Constantes.PISTOLA_HEIGHT, TipoArma.PISTOLA, pistolaTexture, 0, 0);
+        jogador.setArma(arma);
         // Tenta conectar ao servidor
         try {
             cliente.conectaServidor();
@@ -96,12 +97,16 @@ public class PlayState extends State {
         
     }
 
+    public Texture getTiroTexture() {
+        return tiroTexture;
+    }
+
     public List<Jogador> getJogadores() {
         return jogadores;
     }
 
     @Override
-    public void handleInput() {
+    public synchronized  void handleInput() {
         // Movimentação do jogador
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
             cliente.getKryonetClient().sendUDP(jogador.rotacionar(200 * Gdx.graphics.getDeltaTime()));
@@ -122,8 +127,9 @@ public class PlayState extends State {
         // Tiro
         if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE)){
             if(jogador.getArma() != null){
+                System.out.println("JOGADOR ATIRANDO");
                 cliente.getKryonetClient().sendUDP(jogador.atirar());
-                meusTiros.add(new Tiro(jogador.getSprite().getX(), jogador.getSprite().getY(), jogador.getSprite().getRotation(), jogador.getArma().getTipoArma()));
+                meusTiros.add(new Tiro(jogador.getSprite().getX(), jogador.getSprite().getY(), jogador.getSprite().getRotation(), jogador.getArma().getTipoArma(),this.tiroTexture));
             }
         }
     }
@@ -135,7 +141,7 @@ public class PlayState extends State {
     }
 
     @Override
-    public void render(SpriteBatch sb) {
+    public  void render(SpriteBatch sb) {
 
         camera.position.set(jogador.sprite.getX(), jogador.sprite.getY(), 0);
         camera.update();
@@ -152,9 +158,11 @@ public class PlayState extends State {
         }
         
         for(Tiro tiro : tirosDosOutros){
+            //tiro.sprite.setTexture(new Texture(Gdx.files.internal("shot.png")));
             tiro.sprite.draw(sb);
         }
         for(Tiro tiro : meusTiros){
+           // tiro.sprite.setTexture(new Texture(Gdx.files.internal("shot.png")));
             tiro.sprite.draw(sb);
         }
 
@@ -243,12 +251,12 @@ public class PlayState extends State {
         return meusTiros;
     }
 
-    private void calcularTiros(float dt) {
+    private synchronized  void calcularTiros(float dt) {
         // Calculando tiros dos outros
         Iterator<Tiro> iter = tirosDosOutros.iterator();
         while(iter.hasNext()){
             if(!iter.next().mover(dt, Constantes.VELOCIDADE_TIRO)){
-                iter.remove();
+             //   iter.remove();
             }
         }
         
@@ -256,7 +264,7 @@ public class PlayState extends State {
         iter = meusTiros.iterator();
         while(iter.hasNext()){
             if(!iter.next().mover(dt, Constantes.VELOCIDADE_TIRO)){
-                iter.remove();
+             //   iter.remove();
             }
         }
     }
