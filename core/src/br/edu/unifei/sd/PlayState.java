@@ -98,7 +98,7 @@ public class PlayState extends State {
     }
 
     public Texture getTiroTexture() {
-        return tiroTexture;
+        return pistolaTexture;
     }
 
     public List<Jogador> getJogadores() {
@@ -129,6 +129,9 @@ public class PlayState extends State {
             if(jogador.getArma() != null){
                 System.out.println("JOGADOR ATIRANDO");
                 cliente.getKryonetClient().sendUDP(jogador.atirar());
+                System.out.println("POSICAO DE JOGADOR AO ATIRAR");
+                System.out.println(jogador.getSprite().getX());
+                System.out.println(jogador.getSprite().getY());
                 meusTiros.add(new Tiro(jogador.getSprite().getX(), jogador.getSprite().getY(), jogador.getSprite().getRotation(), jogador.getArma().getTipoArma(),this.tiroTexture));
             }
         }
@@ -153,16 +156,28 @@ public class PlayState extends State {
         
         jogador.sprite.draw(sb);
         
+        
         for(Jogador jogador : jogadores){
             jogador.sprite.draw(sb);
+            
         }
         
         for(Tiro tiro : tirosDosOutros){
             //tiro.sprite.setTexture(new Texture(Gdx.files.internal("shot.png")));
+            System.out.println(" desenhando tiros ");
+            System.out.println(" posicao X ");
+            System.out.println( tiro.sprite.getX());
+            System.out.println(" posicao Y ");
+            System.out.println( tiro.sprite.getX());
             tiro.sprite.draw(sb);
         }
         for(Tiro tiro : meusTiros){
            // tiro.sprite.setTexture(new Texture(Gdx.files.internal("shot.png")));
+            System.out.println(" desenhando tiros ");
+            System.out.println(" posicao X ");
+            System.out.println( tiro.sprite.getX());
+            System.out.println(" posicao Y ");
+            System.out.println( tiro.sprite.getX());
             tiro.sprite.draw(sb);
         }
 
@@ -183,9 +198,9 @@ public class PlayState extends State {
 //                        if (jogador.getArma().getTipoArma() == null) {
 //                            jogador.getSprite().setTexture(characterTexture);
 //                        }
-//                        if (jogador.getArma().getTipoArma() == TipoArma.PISTOLA) {
-//                            jogador.getSprite().setTexture(characterPistolaTexture);
-//                        }
+                        if (jogador.getArma().getTipoArma() == TipoArma.PISTOLA) {
+                            jogador.getSprite().setTexture(characterPistolaTexture);
+                        }
 //                        if (jogador.getArma().getTipoArma() == TipoArma.FUZIL) {
 //                            jogador.getSprite().setTexture(characterFuzilTexture);
 //                        }
@@ -256,7 +271,7 @@ public class PlayState extends State {
         Iterator<Tiro> iter = tirosDosOutros.iterator();
         while(iter.hasNext()){
             if(!iter.next().mover(dt, Constantes.VELOCIDADE_TIRO)){
-             //   iter.remove();
+                //iter.remove();
             }
         }
         
@@ -264,7 +279,7 @@ public class PlayState extends State {
         iter = meusTiros.iterator();
         while(iter.hasNext()){
             if(!iter.next().mover(dt, Constantes.VELOCIDADE_TIRO)){
-             //   iter.remove();
+                iter.remove();
             }
         }
     }
