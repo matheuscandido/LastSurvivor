@@ -6,6 +6,7 @@
 package br.edu.unifei.sd;
 
 import br.edu.unifei.sd.rede.JogadorAtirou;
+import br.edu.unifei.sd.rede.JogadorMorreu;
 import br.edu.unifei.sd.rede.JogadorMoveu;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Connection;
@@ -14,6 +15,7 @@ import java.net.InetAddress;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Listener;
 import java.io.IOException;
+import java.util.Iterator;
 
 /**
  *
@@ -40,6 +42,8 @@ public class Cliente {
                     handleJogadorMoveu(connection, object);
                 } else if(object instanceof JogadorAtirou){
                     handleJogadorAtirou(connection, object);
+                } else if(object instanceof JogadorMorreu){
+                    handleJogadorMorreu(connection,object);
                 }
             }
         });
@@ -108,6 +112,18 @@ public class Cliente {
              playstate.getTirosDosOutros().add(new Tiro(x, y, angulo, TipoArma.PISTOLA,playstate.getTiroTexture()));
     }
     
+    protected synchronized void handleJogadorMorreu(Connection connection, Object object){
+            Iterator<Jogador> iter = playstate.getJogadores().iterator();
+            JogadorMorreu morto = (JogadorMorreu) object;
+            while(iter.hasNext()){
+                    
+                if(connection.getID() == morto.playerId){
+                    System.out.println("JOGADOR REMOVIDO");
+                    iter.remove();
+                }
+            }
+            
+    }
     public Client getKryonetClient() {
         return kryonetClient;
     }

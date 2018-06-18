@@ -6,6 +6,7 @@
 package br.edu.unifei.sd;
 
 import br.edu.unifei.sd.rede.JogadorAtirou;
+import br.edu.unifei.sd.rede.JogadorMorreu;
 import br.edu.unifei.sd.rede.JogadorMoveu;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
@@ -51,7 +52,13 @@ public class Servidor {
                     System.out.println("Jogador " + connection.getID() + " atirou. Retransmitindo...");
                     JogadorAtirou mensagem = (rede.JogadorAtirou) object;
                     kryonetServer.sendToAllExceptUDP(connection.getID(),mensagem);
+                } else if(object instanceof rede.JogadorMorreu){
+                    
+                    System.out.println("Jogador " + connection.getID() + " MORREU");
+                    JogadorMorreu mensagem = (rede.JogadorMorreu) object;
+                    kryonetServer.sendToAllExceptUDP(connection.getID(), mensagem);
                 }
+                
             }
 
         });
