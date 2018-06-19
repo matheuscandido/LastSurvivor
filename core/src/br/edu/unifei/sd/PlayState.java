@@ -162,8 +162,8 @@ public class PlayState extends State {
         jogador.sprite.draw(sb);
 
         for (Jogador jogador : jogadores) {
+            jogador.getSprite().setTexture(characterPistolaTexture);
             jogador.sprite.draw(sb);
-
         }
         synchronized (tirosDosOutros) {
             Iterator<Tiro> iterT = tirosDosOutros.iterator();
@@ -302,6 +302,8 @@ public class PlayState extends State {
         while (iter.hasNext()) {
             Tiro tir = iter.next();
             if (!tir.mover(dt, Constantes.VELOCIDADE_TIRO)) {
+                System.out.println("IMPRIMEINDO ALTURA DO TIR");
+                System.out.println(tir.altura);
                 calculaMorte(tir);
                 iter.remove();
             }
@@ -310,13 +312,14 @@ public class PlayState extends State {
 
     private synchronized void calculaMorte(Tiro tiroMorte) {
         Iterator<Jogador> iterm = jogadores.iterator();
+        System.out.println("ENTRANDO EM CALCULA MORTE");
         while (iterm.hasNext()) {
             Jogador mortoAtual = iterm.next();
             if (tiroMorte.sprite.getBoundingRectangle().overlaps(mortoAtual.sprite.getBoundingRectangle())) {
-                    JogadorMorreu morto = new JogadorMorreu();
-                    morto.playerId = mortoAtual.getId();
-                    System.out.println("ENVIANDO MORTE!!!!!!!!!");
-                    cliente.getKryonetClient().sendUDP(morto);
+                JogadorMorreu morto = new JogadorMorreu();
+                morto.playerId = mortoAtual.getId();
+                System.out.println("ENVIANDO MORTE!!!!!!!!!");
+                cliente.getKryonetClient().sendUDP(morto);
             }
         }
     }

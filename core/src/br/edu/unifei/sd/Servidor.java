@@ -56,7 +56,8 @@ public class Servidor {
                     
                     System.out.println("Jogador " + connection.getID() + " MORREU");
                     JogadorMorreu mensagem = (rede.JogadorMorreu) object;
-                    kryonetServer.sendToAllExceptUDP(connection.getID(), mensagem);
+                     kryonetServer.sendToAllExceptUDP(connection.getID(), mensagem);
+                      //kryonetServer.sendToAllUDP(mensagem);
                 }
                 
             }
