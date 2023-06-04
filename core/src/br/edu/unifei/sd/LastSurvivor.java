@@ -21,7 +21,7 @@ public class LastSurvivor extends Game {
     }
 
     @Override
-    public void render () {        
+    public synchronized  void render () {        
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         gsm.update(Gdx.graphics.getDeltaTime());
         gsm.render(batch);       

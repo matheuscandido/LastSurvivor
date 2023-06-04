@@ -5,9 +5,11 @@
  */
 package br.edu.unifei.sd;
 
-import com.badlogic.gdx.Gdx;
+import br.edu.unifei.sd.rede.JogadorAtirou;
+import br.edu.unifei.sd.rede.JogadorMoveu;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import java.util.List;
 
 /**
  *
@@ -15,44 +17,80 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
  */
 public class Jogador extends Movel{
     
-    private String nickname;
     private Arma arma;
-    private Cliente cliente;
-    
-    public Jogador(float largura, float altura, Texture texture, int posX, int posY) {
-        super(largura, altura);
-        sprite = new Sprite(texture);
-        sprite.setScale(0.4f);
-    }
-    
-    public void darComando(Comando comando){
-        
-    }
-    
-    public Tiro atirar(){
-        return new Tiro(Constantes.TIRO_LARGURA, Constantes.TIRO_ALTURA, x, y, angulo, arma);
-    }
-    
-    float addX,addY;
-    public void andar(float r){
-        addX = (float) Math.cos(Math.toRadians((double)this.sprite.getRotation()%360)) * r;
-        addY = (float) Math.sin(Math.toRadians((double)this.sprite.getRotation()%360)) * r;
-        
-        System.err.println("(x: " + sprite.getX() + ", dx: " + addX + "\t" + 
-               "(y: " + sprite.getY() + ", dy: " + addY + "\t" +
-                "deg: " +sprite.getRotation()+ ", dd: 0" + ")");
-        this.sprite.setPosition(this.sprite.getX() + addX, this.sprite.getY() + addY);
-    }
-    
-    public void rotacionar(float angulo){
-        float deg = (this.sprite.getRotation() + angulo)%360;
-        this.sprite.setRotation(deg);
-        
-        System.err.println("(x: " + sprite.getX() + ", dx: " + addX + ")\t" + 
-               "(y: " + sprite.getY() + ", dy: " + addY + ")\t" +
-                "(deg: " +sprite.getRotation()+ ", dd: " + angulo +")");
+    private String nickname;
+    private int id;
+
+    public int getId() {
+        return id;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+    
+    
+    public Jogador(int largura, int altura, Texture texture, float posX, float posY) {
+        super(largura, altura);
+        sprite = new Sprite(texture);
+        sprite.setSize(largura, altura);
+        sprite.setOriginCenter();
+        sprite.setPosition(posX, posY);
+    }
+    
+    public Jogador(int id, int largura, int altura, Texture texture, float posX, float posY) {
+        super(largura, altura);
+        
+        this.id = id;
+        
+        sprite = new Sprite(texture);
+        sprite.setSize(largura, altura);
+        sprite.setOriginCenter();
+        sprite.setPosition(posX, posY);
+    }
+    
+    public JogadorAtirou atirar(){
+        boolean isFuzil = false;
+        if(this.getArma().getTipoArma() == TipoArma.FUZIL)
+            isFuzil = true;
+        if(this.getArma().getTipoArma() == TipoArma.PISTOLA)
+            isFuzil = false;
+        return new JogadorAtirou(this.sprite.getX(), this.sprite.getY(), this.sprite.getRotation(), isFuzil);
+    }
+   
+    public JogadorMoveu andar(List<Jogador> jogadores, float r){
+        float newX = this.sprite.getX() + (float) Math.cos(Math.toRadians((double)this.sprite.getRotation()%360)) * r;
+        float newY = this.sprite.getY() + (float) Math.sin(Math.toRadians((double)this.sprite.getRotation()%360)) * r;
+        float oldX = this.sprite.getX();
+        float oldY = this.sprite.getY();
+        
+        boolean overlaps = false;
+        
+        this.sprite.setPosition(newX, newY);
+        
+        for(Jogador outro : jogadores){
+            if(this.sprite.getBoundingRectangle().overlaps(outro.sprite.getBoundingRectangle())){
+                overlaps = true;
+            }
+        }
+        
+        if(!overlaps){
+            this.sprite.setPosition(newX, newY);
+            return new JogadorMoveu(id, newX, newY, this.sprite.getRotation());
+        } else {
+            this.sprite.setPosition(oldX, oldY);
+            return null;
+        }
+    }
+    
+    public JogadorMoveu rotacionar(float angulo){
+        float deg = (this.sprite.getRotation() + angulo)%360;
+        this.sprite.setRotation(deg);
+        return new JogadorMoveu(id, sprite.getX(), sprite.getY(), deg);
+       
+    }
+
+  
     public String getNickname() {
         return nickname;
     }
@@ -65,9 +103,15 @@ public class Jogador extends Movel{
         return arma;
     }
 
+    
+
     public void setArma(Arma arma) {
         this.arma = arma;
     }
+
+//    public void setCliente(Cliente cliente) {
+//        this.cliente = cliente;
+//    }
     
     
     

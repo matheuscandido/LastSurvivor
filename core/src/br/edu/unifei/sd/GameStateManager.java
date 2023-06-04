@@ -33,11 +33,11 @@ public class GameStateManager {
         states.push(state);
     }
     
-    public void update(float dt){ // adicionado
+    public synchronized void  update(float dt){ // adicionado
         states.peek().update(dt);
     }
     
-    public void render(SpriteBatch sb){
+    public synchronized  void render(SpriteBatch sb){
         states.peek().render(sb);
     }
     
